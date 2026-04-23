@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safecure AI | Patient Database</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .header-left {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .header-left h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .header-left p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            padding: 25px 30px;
+            background: linear-gradient(135deg, #f8f9ff, #f0f0ff);
+            border-bottom: 1px solid #e8e8f0;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 3px 15px rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card i {
+            font-size: 1.8rem;
+            color: #667eea;
+        }
+
+        .stat-card .stat-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 500;
+        }
+
+        /* Search & Filter */
+        .controls {
+            padding: 20px 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 11px 15px 11px 40px;
+            border: 2px solid #e8e8f0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-select {
+            padding: 11px 15px;
+            border: 2px solid #e8e8f0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #555;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .refresh-btn {
+            padding: 11px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Table */
+        .table-container {
+            padding: 0 30px 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        thead tr {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        thead th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        thead th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        thead th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s;
+            animation: rowSlide 0.4s ease-out;
+        }
+
+        @keyframes rowSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        tbody tr:hover {
+            background: #f8f8ff;
+            transform: scale(1.002);
+        }
+
+        tbody td {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            color: #444;
+            vertical-align: top;
+            max-width: 220px;
+        }
+
+        .patient-id-cell {
+            font-weight: 700;
+            color: #667eea;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .antibiotic-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-yes {
+            background: #ffe0e0;
+            color: #d32f2f;
+        }
+
+        .badge-no {
+            background: #e0f5e9;
+            color: #2e7d32;
+        }
+
+        .truncate {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .truncate:hover {
+            white-space: normal;
+            overflow: visible;
+        }
+
+        .timestamp {
+            color: #999;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            color: white;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-section {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .modal-section h4 {
+            color: #667eea;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-section p {
+            font-size: 0.9rem;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f0f0ff;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-bar {
+                gap: 10px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .table-container {
+                padding: 0 15px 20px;
+            }
+
+            thead th,
+            tbody td {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="animated-bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="glass-card">
+
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <i class="bi bi-database-fill-gear"></i>
+                    <div>
+                        <h1>Patient Database</h1>
+                        <p>Safecure AI — Clinical Records</p>
+                    </div>
+                </div>
+                <a href="/" class="back-btn">
+                    <i class="bi bi-arrow-left"></i> Back to Analysis
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-card">
+                    <i class="bi bi-people-fill"></i>
+                    <div>
+                        <div class="stat-num" id="totalCount">—</div>
+                        <div class="stat-label">Total Patients</div>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left-color:#d32f2f">
+                    <i class="bi bi-capsule-pill" style="color:#d32f2f"></i>
+                    <div>
+                        <div class="stat-num" id="antibioticYes">—</div>
+                        <div class="stat-label">Antibiotic Prescribed</div>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left-color:#2e7d32">
+                    <i class="bi bi-shield-check" style="color:#2e7d32"></i>
+                    <div>
+                        <div class="stat-num" id="antibioticNo">—</div>
+                        <div class="stat-label">Antibiotic Not Required</div>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left-color:#f57c00">
+                    <i class="bi bi-clock-history" style="color:#f57c00"></i>
+                    <div>
+                        <div class="stat-num" id="todayCount">—</div>
+                        <div class="stat-label">Today's Cases</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by Patient ID, symptoms, diagnosis..."
+                        oninput="filterTable()">
+                </div>
+                <select class="filter-select" id="antibioticFilter" onchange="filterTable()">
+                    <option value="">All Cases</option>
+                    <option value="yes">Antibiotic: YES</option>
+                    <option value="no">Antibiotic: NO</option>
+                </select>
+                <button class="refresh-btn" onclick="loadPatients()">
+                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                </button>
+                <button class="refresh-btn" style="background:linear-gradient(135deg,#28a745,#20c997);"
+                    onclick="downloadCSV()">
+                    <i class="bi bi-filetype-csv"></i> CSV
+                </button>
+                <button class="refresh-btn" style="background:linear-gradient(135deg,#217346,#1e6e3e);"
+                    onclick="downloadExcel()">
+                    <i class="bi bi-file-earmark-excel-fill"></i> Excel
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <div id="loadingState" class="loading">
+                    <div class="loading-spinner"></div>
+                    <p style="color:#999">Loading patient records...</p>
+                </div>
+
+                <table id="patientsTable" style="display:none">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-person-badge"></i> Patient ID</th>
+                            <th><i class="bi bi-clock"></i> Timestamp</th>
+                            <th><i class="bi bi-activity"></i> Symptoms</th>
+                            <th><i class="bi bi-clipboard2-pulse"></i> Diagnosis</th>
+                            <th><i class="bi bi-capsule"></i> Antibiotics</th>
+                            <th><i class="bi bi-star"></i> First-Line</th>
+                            <th><i class="bi bi-eye"></i> Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+
+                <div id="emptyState" class="empty-state" style="display:none">
+                    <i class="bi bi-database-x"></i>
+                    <p>No patient records found.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3><i class="bi bi-file-medical-fill"></i> <span id="modalTitle">Patient Details</span></h3>
+                <button class="modal-close" onclick="closeModalDirect()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        let allPatients = [];
+
+        async function loadPatients() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('patientsTable').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+
+            try {
+                const res = await fetch('/patients');
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    allPatients = data.patients;
+                    updateStats(allPatients);
+                    renderTable(allPatients);
+                }
+            } catch (e) {
+                document.getElementById('loadingState').innerHTML = `<p style="color:#e74c3c">❌ Failed to load. Is the server running?</p>`;
+            }
+        }
+
+        function updateStats(patients) {
+            const today = new Date().toISOString().split('T')[0];
+            const yesCount = patients.filter(p => p.antibiotic_necessity && p.antibiotic_necessity.toUpperCase().startsWith('YES')).length;
+            const noCount = patients.filter(p => p.antibiotic_necessity && p.antibiotic_necessity.toUpperCase().startsWith('NO')).length;
+            const todayCount = patients.filter(p => p.timestamp && p.timestamp.startsWith(today)).length;
+
+            document.getElementById('totalCount').textContent = patients.length;
+            document.getElementById('antibioticYes').textContent = yesCount;
+            document.getElementById('antibioticNo').textContent = noCount;
+            document.getElementById('todayCount').textContent = todayCount;
+        }
+
+        function renderTable(patients) {
+            document.getElementById('loadingState').style.display = 'none';
+
+            if (!patients.length) {
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('patientsTable').style.display = 'table';
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            patients.forEach(p => {
+                const antiYes = p.antibiotic_necessity && p.antibiotic_necessity.toUpperCase().startsWith('YES');
+                const badge = antiYes
+                    ? `<span class="antibiotic-badge badge-yes">YES</span>`
+                    : `<span class="antibiotic-badge badge-no">NO</span>`;
+
+                const diagnosis = (p.assessment || '').split('.')[0];
+                const firstLine = (p.first_line || 'Not required').split(' ')[0] + (p.first_line && p.first_line.length > 20 ? '...' : '');
+
+                const row = document.createElement('tr');
+                const idx = allPatients.indexOf(p);
+                row.innerHTML = `
+                <td class="patient-id-cell">${p.id}</td>
+                <td class="timestamp">${p.timestamp}</td>
+                <td><div class="truncate" title="${escHtml(p.condition)}">${escHtml(p.condition || '—')}</div></td>
+                <td><div class="truncate" title="${escHtml(p.assessment)}">${escHtml(diagnosis || '—')}</div></td>
+                <td>${badge}</td>
+                <td><div class="truncate" title="${escHtml(p.first_line)}">${escHtml(firstLine || '—')}</div></td>
+                <td>
+                    <button onclick='showModal(${idx})' style="
+                        background: linear-gradient(135deg,#667eea,#764ba2);
+                        color:white; border:none; border-radius:8px;
+                        padding:6px 14px; cursor:pointer; font-size:0.8rem;
+                        font-family:Inter,sans-serif; font-weight:600; transition:all 0.2s;">
+                        <i class="bi bi-eye"></i> View
+                    </button>
+                </td>
+            `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const abFilter = document.getElementById('antibioticFilter').value.toLowerCase();
+
+            const filtered = allPatients.filter(p => {
+                const matchSearch = !search ||
+                    (p.id || '').toLowerCase().includes(search) ||
+                    (p.condition || '').toLowerCase().includes(search) ||
+                    (p.assessment || '').toLowerCase().includes(search) ||
+                    (p.allergies || '').toLowerCase().includes(search);
+
+                const matchAb = !abFilter ||
+                    (abFilter === 'yes' && p.antibiotic_necessity && p.antibiotic_necessity.toUpperCase().startsWith('YES')) ||
+                    (abFilter === 'no' && p.antibiotic_necessity && p.antibiotic_necessity.toUpperCase().startsWith('NO'));
+
+                return matchSearch && matchAb;
+            });
+
+            renderTable(filtered);
+        }
+
+        function showModal(idx) {
+            const p = allPatients[idx];
+            document.getElementById('modalTitle').textContent = `Patient ${p.id}`;
+            document.getElementById('modalBody').innerHTML = `
+            <div class="modal-section">
+                <h4>🪪 Patient Info</h4>
+                <p><strong>ID:</strong> ${p.id} &nbsp;|&nbsp; <strong>Date:</strong> ${p.timestamp}</p>
+            </div>
+            <div class="modal-section">
+                <h4>🩺 Symptoms / Condition</h4>
+                <p>${escHtml(p.condition || '—')}</p>
+            </div>
+            <div class="modal-section">
+                <h4>⚠️ Allergies</h4>
+                <p>${escHtml(p.allergies || 'None reported')}</p>
+            </div>
+            <div class="modal-section">
+                <h4>💊 Current Medications</h4>
+                <p>${escHtml(p.medications || 'None reported')}</p>
+            </div>
+            <div class="modal-section">
+                <h4>🔬 Clinical Assessment</h4>
+                <p>${escHtml(p.assessment || '—')}</p>
+            </div>
+            <div class="modal-section" style="border-left-color:${p.antibiotic_necessity && p.antibiotic_necessity.toUpperCase().startsWith('YES') ? '#d32f2f' : '#2e7d32'}">
+                <h4>💉 Antibiotic Necessity</h4>
+                <p>${escHtml(p.antibiotic_necessity || '—')}</p>
+            </div>
+            <div class="modal-section">
+                <h4>⭐ First-Line Therapy</h4>
+                <p>${escHtml(p.first_line || 'Not required')}</p>
+            </div>
+            <div class="modal-section">
+                <h4>🔄 Second-Line Alternatives</h4>
+                <p>${escHtml(p.second_line || 'Not required')}</p>
+            </div>
+            <div class="modal-section">
+                <h4>🚫 Contraindications & Precautions</h4>
+                <p>${escHtml(p.contraindications || '—')}</p>
+            </div>
+        `;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+        }
+
+        function closeModalDirect() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function downloadCSV() {
+            if (!allPatients.length) return alert('No data to download.');
+            const headers = ['Patient ID', 'Timestamp', 'Symptoms', 'Allergies', 'Medications', 'Diagnosis', 'Antibiotics', 'First-Line', 'Second-Line', 'Contraindications'];
+            const rows = allPatients.map(p => [
+                p.id, p.timestamp, p.condition, p.allergies, p.medications,
+                p.assessment, p.antibiotic_necessity, p.first_line, p.second_line, p.contraindications
+            ].map(v => `"${(v || '').replace(/"/g, '""')}"`));
+
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `safecure_patients_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function downloadExcel() {
+            if (!allPatients.length) return alert('No data to download.');
+            const headers = ['Patient ID', 'Timestamp', 'Symptoms', 'Allergies', 'Medications', 'Diagnosis', 'Antibiotics', 'First-Line', 'Second-Line', 'Contraindications'];
+            const rows = allPatients.map(p => [
+                p.id, p.timestamp, p.condition, p.allergies, p.medications,
+                p.assessment, p.antibiotic_necessity, p.first_line, p.second_line, p.contraindications
+            ]);
+
+            // Build XML-based Excel (xls)
+            let xml = `<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+<Worksheet ss:Name="Patients"><Table>`;
+
+            xml += '<Row>' + headers.map(h => `<Cell><Data ss:Type="String">${h}</Data></Cell>`).join('') + '</Row>';
+            rows.forEach(row => {
+                xml += '<Row>' + row.map(v => `<Cell><Data ss:Type="String">${(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</Data></Cell>`).join('') + '</Row>';
+            });
+
+            xml += '</Table></Worksheet></Workbook>';
+            const blob = new Blob([xml], { type: 'application/vnd.ms-excel' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `safecure_patients_${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
+        }
+
+        function escHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+
+        // Load on start
+        loadPatients();
+    </script>
+</body>
+
+</html>

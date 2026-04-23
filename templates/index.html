@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safecure AI | Neural Clinical Intelligence Platform</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Generate multiple circles with different delays */
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo i {
+            font-size: 60px;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-top: 10px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+        }
+
+        /* Form Area */
+        .form-area {
+            padding: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .input-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .input-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .input-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        label i {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+            animation: glowPulse 2s infinite;
+        }
+
+        .analyze-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px rgba(102, 126, 234, 0.3), 0 0 10px rgba(102, 126, 234, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(102, 126, 234, 0.3), 0 0 10px rgba(102, 126, 234, 0.2);
+            }
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            animation: none;
+        }
+
+        .analyze-btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-content i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .analyze-btn:hover .btn-content i:first-child {
+            transform: scale(1.1);
+        }
+
+        .analyze-btn:hover .btn-content i:last-child {
+            transform: translateX(5px);
+        }
+
+        /* Processing Animation */
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .processing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .double-bounce1,
+        .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+            animation-delay: -1.0s;
+        }
+
+        @keyframes sk-bounce {
+
+            0%,
+            100% {
+                transform: scale(0.0);
+            }
+
+            50% {
+                transform: scale(1.0);
+            }
+        }
+
+        .processing-steps {
+            margin-top: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            animation: stepPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes stepPulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .step i {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        /* Output Area */
+        .output-area {
+            padding: 0 40px 40px 40px;
+            animation: fadeInUp 0.5s ease-out 0.4s both;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            animation: cardSlide 0.5s ease-out;
+        }
+
+        @keyframes cardSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-card ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .result-card li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .form-area,
+            .output-area {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="animated-bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="header">
+                <div class="logo">
+                    <i class="bi bi-cpu-fill"></i>
+                    <h1>Safecure AI</h1>
+                    <p>Neural Clinical Intelligence Platform</p>
+                </div>
+            </div>
+
+            <div class="form-area">
+                <div class="input-group">
+                    <label><i class="bi bi-activity"></i> Symptoms / Condition</label>
+                    <textarea id="condition" rows="4"
+                        placeholder="Enter detailed patient symptoms and condition..." required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="bi bi-shield-exclamation"></i> Allergies</label>
+                    <input id="allergies" placeholder="e.g., Penicillin, Sulfa, Latex (type 'None' if none)" required>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="bi bi-capsule"></i> Current Medications</label>
+                    <input id="medications" placeholder="e.g., Metformin, Lisinopril, Warfarin">
+                </div>
+
+                <!-- Replace your button with this HTML -->
+                <button class="analyze-btn" onclick="analyzeCase()">
+                    <div class="btn-content">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Analyze Clinical Case</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </button>
+            </div>
+
+            <div id="output" class="output-area"></div>
+        </div>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div id="processingOverlay" class="processing-overlay">
+        <div class="processing-card">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+            <h3>Neural Analysis in Progress</h3>
+            <div class="processing-steps">
+                <div class="step" id="step1">
+                    <i class="bi bi-database"></i>
+                    <span>Retrieving medical guidelines...</span>
+                </div>
+                <div class="step" id="step2">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Checking allergies & contraindications...</span>
+                </div>
+                <div class="step" id="step3">
+                    <i class="bi bi-robot"></i>
+                    <span>Generating clinical recommendations...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatOutput(text) {
+            text = text.replace(/\*\*/g, "");
+
+            const sections = {
+                condition: "",
+                antibiotic_need: "",
+                first_line: [],
+                second_line: [],
+                avoid: []
+            };
+
+            const lines = text.split('\n');
+            let current = null;
+
+            for (let line of lines) {
+                line = line.trim();
+                if (line.startsWith("Clinical Assessment:")) {
+                    current = "condition";
+                    sections.condition = line.replace("Clinical Assessment:", "").trim();
+                }
+                else if (line.startsWith("Antibiotic Necessity:")) {
+                    current = "antibiotic_need";
+                    sections.antibiotic_need = line.replace("Antibiotic Necessity:", "").trim();
+                }
+                else if (line.startsWith("First-Line Therapy:")) {
+                    current = "first_line";
+                    // capture inline text if any
+                    let inline = line.replace("First-Line Therapy:", "").trim();
+                    if (inline) sections.first_line.push(inline);
+                }
+                else if (line.startsWith("Second-Line Alternatives:")) {
+                    current = "second_line";
+                    let inline = line.replace("Second-Line Alternatives:", "").trim();
+                    if (inline) sections.second_line.push(inline);
+                }
+                else if (line.startsWith("Contraindications & Precautions:")) {
+                    current = "avoid";
+                    let inline = line.replace("Contraindications & Precautions:", "").trim();
+                    if (inline) sections.avoid.push(inline);
+                }
+                else if (line && current) {
+                    // capture all non-empty lines under current section
+                    let item = line.startsWith("-") ? line.substring(1).trim() : line;
+                    if (item) {
+                        if (current === "condition") {
+                            sections.condition += (sections.condition ? " " : "") + item;
+                        } else if (current === "antibiotic_need") {
+                            sections.antibiotic_need += (sections.antibiotic_need ? " " : "") + item;
+                        } else {
+                            sections[current].push(item);
+                        }
+                    }
+                }
+            }
+
+            // Extract only drug names (text before comma or "if" or "as")
+            function extractDrugName(text) {
+    // Extract first drug name only — stop at comma, bracket, space+lowercase word
+    let name = text.split(/,|\(| if | as | in case| such as| including| for | due | which| or |\/|\+/i)[0].trim();
+    // Capitalize first letter
+    return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+            const firstLineHtml = sections.first_line.length ?
+                `<ul>${sections.first_line.map(item => `<li><i class="bi bi-check-circle-fill" style="color: #28a745; font-size: 0.8rem;"></i> ${escapeHtml(extractDrugName(item))}</li>`).join('')}</ul>` :
+                `<p style="color:#28a745;">✔ Supportive Care Recommended — consult your doctor before taking any medicine</p>`;
+
+            const secondLineHtml = sections.second_line.length ?
+                `<ul>${sections.second_line.map(item => `<li><i class="bi bi-arrow-repeat" style="color: #ffc107;"></i> ${escapeHtml(extractDrugName(item))}</li>`).join('')}</ul>` :
+                `<p>Not required</p>`;
+
+            const avoidHtml = sections.avoid.length ?
+                `<ul>${sections.avoid.map(item => `<li><i class="bi bi-exclamation-triangle-fill" style="color: #dc3545;"></i> ${escapeHtml(extractDrugName(item))}</li>`).join('')}</ul>` :
+                `<p>None</p>`;
+
+            return `
+            <div class="result-card">
+                <h4><i class="bi bi-clipboard-pulse"></i> Clinical Assessment</h4>
+                <p>${escapeHtml((sections.condition || "").split('.')[0] + '.')}</p>
+            </div>
+            
+            <div class="result-card">
+                <h4><i class="bi bi-prescription2"></i> Antibiotic Necessity</h4>
+                <p>${escapeHtml((sections.antibiotic_need || "").split('.')[0] + '.')}</p>
+            </div>
+            
+            <div class="result-card">
+                <h4><i class="bi bi-star-fill" style="color: #ffc107;"></i> First-Line Therapy</h4>
+                ${firstLineHtml}
+            </div>
+            
+            <div class="result-card">
+                <h4><i class="bi bi-arrow-left-right"></i> Second-Line Alternatives</h4>
+                ${secondLineHtml}
+            </div>
+            
+            <div class="result-card">
+                <h4><i class="bi bi-exclamation-triangle"></i> Contraindications & Precautions</h4>
+                ${avoidHtml}
+            </div>
+            
+            <div class="result-card">
+                <h4><i class="bi bi-shield-lock-fill"></i> Clinical Disclaimer</h4>
+                <p style="font-size: 0.85rem; color: #666;">⚠️ This AI-generated recommendation should be verified by a licensed healthcare professional. Always consider patient-specific factors and local resistance patterns.</p>
+            </div>
+        `;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>]/g, function (m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function animateSteps() {
+            const steps = ['step1', 'step2', 'step3'];
+            let index = 0;
+
+            const interval = setInterval(() => {
+                if (index < steps.length) {
+                    const step = document.getElementById(steps[index]);
+                    step.style.opacity = '1';
+                    step.style.transform = 'translateX(0)';
+                    index++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1500);
+
+            return interval;
+        }
+
+        async function analyzeCase() {
+            const condition = document.getElementById('condition').value.trim();
+            const allergies = document.getElementById('allergies').value.trim();
+            const medications = document.getElementById('medications').value.trim();
+            const output = document.getElementById('output');
+
+            if (!condition) {
+                output.innerHTML = '<div class="result-card" style="border-left-color: #dc3545;"><h4><i class="bi bi-exclamation-circle"></i> Missing Information</h4><p>Please enter patient symptoms or condition.</p></div>';
+                return;
+            }
+
+            // Show processing overlay
+            const overlay = document.getElementById('processingOverlay');
+            overlay.style.display = 'flex';
+
+            // Reset steps
+            const steps = ['step1', 'step2', 'step3'];
+            steps.forEach(step => {
+                const elem = document.getElementById(step);
+                elem.style.opacity = '0.5';
+                elem.style.transform = 'translateX(-10px)';
+            });
+
+            // Animate steps
+            const animationInterval = animateSteps();
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        condition: condition,
+                        allergies: allergies || "None reported",
+                        medications: medications || "None reported"
+                    })
+                });
+
+                clearInterval(animationInterval);
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                let text = data.response || "No response from AI engine";
+
+                // Hide overlay
+                overlay.style.display = 'none';
+
+                // Format and display output with animation
+                output.innerHTML = formatOutput(text);
+
+                // Scroll to output
+                output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (error) {
+                clearInterval(animationInterval);
+                overlay.style.display = 'none';
+                output.innerHTML = `<div class="result-card" style="border-left-color: #dc3545;">
+                <h4><i class="bi bi-bug"></i> Connection Error</h4>
+                <p>Failed to connect to the AI engine. Please ensure the backend server is running.</p>
+                <details><summary>Error details</summary>${escapeHtml(error.message)}</details>
+            </div>`;
+            }
+        }
+
+        // Add enter key support (Ctrl+Enter)
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                analyzeCase();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

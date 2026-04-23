@@ -1,0 +1,2 @@
+# SafeCure.AI
+Safecure AI is an AI-powered clinical decision support system that analyzes patient symptoms, allergies, and medications to provide safe, evidence-based diagnosis, treatment suggestions, and test recommendations with strong focus on accuracy and patient safety.
