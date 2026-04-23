@@ -69,7 +69,8 @@
 #                 VECTORSTORE = initialize_rag()
 #     return VECTORSTORE
 
-# # ==============================
+# # ==============================git rm --cached app.py
+
 # # LLM CALL
 # # ==============================
 # def call_llm(llm_prompt):
