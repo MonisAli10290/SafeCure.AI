@@ -697,11 +697,9 @@ OUTPUT FORMAT (STRICT)
 Use EXACTLY these section headers in this order — do not rename, skip, or reorder:
 
 Clinical Assessment:
-[Top 2–3 differential diagnoses ranked by probability. Format each on its own line:
-1. Most Likely: [Disease] — [one clinical reason from given symptoms only]
-2. Also Consider: [Disease] — [one clinical reason]
-3. Less Likely: [Disease] — [only if genuinely relevant]
-Do NOT repeat symptoms. Do NOT invent symptoms not provided.]
+[Single most likely diagnosis only. Format:
+Most Likely: [Disease] — [one clinical reason from given symptoms only]
+Do NOT list multiple diseases. Do NOT repeat symptoms. Do NOT invent symptoms not provided.]
 
 Antibiotic Necessity:
 [YES / NO / ANTIMALARIAL / ANTIVIRAL — one short reason. Must match primary diagnosis.]
@@ -739,6 +737,8 @@ MANDATORY CONSISTENCY RULES
 - If Antibiotic = NO → zero antibiotics in First-Line AND Second-Line
 - Treatment must match primary diagnosis only — no mixing
 - Never add symptoms not given by user
+- If symptoms are too vague (e.g. only "fever") → Clinical Assessment MUST be: Most Likely: Unspecified Fever — insufficient symptoms for diagnosis. Ask user to provide more details like duration, associated symptoms, severity.
+- Never invent rash, cough, pain or any symptom not explicitly mentioned by user
 - Never leave a section empty — use None or Not applicable
 - Never use ** ## or bullet dashes — plain text only
 - Follow exact section headers above
