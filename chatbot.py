@@ -566,221 +566,133 @@ def clinical_engine(data):
     rule_hint = "Use clinical reasoning based on PDF guidelines and symptoms only.\n"
 
     llm_prompt = f"""
-You are a senior physician and clinical decision support system (CDS).
+You are a Clinical Decision Support System (CDS).
 
-IMPORTANT: Base your diagnosis STRICTLY on the Clinical Guidelines from PDF context below and the patient's symptoms. Do NOT use hardcoded rules.
+CRITICAL RULE:
+You MUST use ONLY the provided Clinical Guidelines (PDF Context).
+You are STRICTLY FORBIDDEN from using outside knowledge, assumptions, or general medical knowledge.
+
+If the answer is not clearly supported by the PDF Context:
+→ DO NOT guess
+→ DO NOT infer
+→ Return "INSUFFICIENT DATA"
+
 ========================
-RULE ENGINE OUTPUT
-========================
-{rule_hint}
-========================
-INPUT DATA
-========================
+INPUT
+=====
+
 Symptoms: {condition}
 Allergies: {allergies}
 Current Medications: {medications}
-Age: {age}
-Pregnancy Status: {pregnancy_status}
-Diabetes: {diabetes}
-Renal Issues: {renal_issues}
 
 Clinical Guidelines (PDF Context):
 {context}
 
 ========================
-REASONING FRAMEWORK (POORQA)
-========================
+CORE RULES (NON-NEGOTIABLE)
+===========================
 
-Step 1: Pattern Recognition
-- Analyze symptom combinations carefully
-- Identify if symptoms strongly match a known clinical pattern
-- If a strong pattern exists → prefer a specific diagnosis
-- If no clear pattern → use general diagnosis cautiously
-
-Step 2: Differential Diagnosis
-- List top 1–3 most likely diseases
-- Rank them by probability (most likely first)
-- Do NOT include unrelated diseases
-
-Step 3: Antibiotic Decision
-- Decide: YES / NO / ALTERNATIVE (e.g., antiviral/antiparasitic)
-- Antibiotics ONLY if strong bacterial evidence
-- If unclear → DO NOT give antibiotics
-
-Step 4: Treatment Selection
-- First-line = safest effective option
-- Second-line = only if needed
-- Treatment MUST match primary diagnosis ONLY
-- DO NOT mix treatments from different diseases
-
-Step 5: Safety Check (CRITICAL)
-- Check allergies
-- Check drug safety
-- Avoid:
-  - Unnecessary antibiotics
-  - NSAIDs in suspected bleeding-risk conditions
-  - Steroids unless clearly indicated
-- Prefer safest drug (e.g., paracetamol over NSAIDs when uncertain)
-
-Step 6: Test Justification
-- Mild case + clear clinical pattern → 0 tests needed, write "None required"
-- Moderate suspicion → 1–2 targeted confirmatory tests only
-- Severe or uncertain diagnosis → targeted panel only, no blanket ordering
-- DO NOT suggest CBC routinely for every case
-- Each test MUST have a specific clinical reason stated after a dash
-
-Step 7: Final Validation
-Before answering, ensure:
-- No hallucinated symptoms added
-- No unsafe drug suggested
-- No missing critical test
-- No vague diagnosis if specific possible
+1. ONLY use information present in PDF Context
+2. NEVER add diseases not supported by context
+3. NEVER assume missing symptoms
+4. NEVER guess diagnosis
+5. If context is weak or missing → return INSUFFICIENT DATA
 
 ========================
-STRICT RULES
+SAFE CARE MODE (MANDATORY)
+==========================
+
+If PDF Context indicates mild / viral / self-limiting illness:
+
+* Antibiotic Necessity MUST be NO
+
+* Treatment MUST be supportive only:
+
+  * Paracetamol
+  * Fluids / ORS
+  * Rest
+  * Steam inhalation (if relevant)
+
+* Tests:
+  None required — unless clearly stated in context
+
 ========================
-- NEVER assume symptoms not provided
-- NEVER give antibiotics without clear bacterial indication
-- NEVER use vague diagnosis if a strong clinical pattern exists
-- NEVER suggest contraindicated or harmful drugs
-- ALWAYS prioritize patient safety above all else
-- ALWAYS be clinically logical and consistent
-- Viral fever / dengue / malaria / flu → antibiotics ABSOLUTELY PROHIBITED
-- Mild URI or cold < 3 days → supportive care ONLY, no antibiotics
-- If bacterial infection is UNCLEAR → do NOT give antibiotics; recommend 48hr monitoring
-- If CRITICAL emergency (chest pain + sweating, unconscious, heavy bleeding, can't breathe, stiff neck) →
-  Clinical Assessment MUST start with "EMERGENCY: Immediate hospital referral required."
-- Consider patient age, allergies, comorbidities (diabetes, renal issues) in every recommendation
-- Include pregnancy contraindications ONLY if pregnancy_status is explicitly mentioned by user — do NOT assume
-- Elderly or renal impairment → avoid Nitrofurantoin for upper UTI; flag renally-cleared drug risks
-- Diabetic patients → flag Ciprofloxacin interaction risk where relevant
+ANTIBIOTIC RULE (STRICT)
+========================
+
+Antibiotics are allowed ONLY IF:
+
+* Explicitly supported by PDF Context
+  AND
+* Clear bacterial diagnosis is present in context
+
+Otherwise:
+→ Antibiotic Necessity = NO
+
+========================
+DIAGNOSIS RULES
+===============
+
+* Select ONLY diseases that are explicitly supported by PDF Context
+* Match symptoms strictly — do not infer missing symptoms
+* If no clear match:
+  → DO NOT diagnose
+
+Instead return:
+
+Clinical Assessment:
+Most Likely: Insufficient data — no matching condition found in clinical guidelines
+
+Additional Information Needed:
+
+* Provide more specific symptoms
+
+========================
+TEST RULES
+==========
+
+* Suggest ONLY tests mentioned in PDF Context
+* DO NOT suggest external or generic tests
+* If not in context → DO NOT include
 
 ========================
 OUTPUT FORMAT (STRICT)
-========================
-
-Use EXACTLY these section headers in this order — do not rename, skip, or reorder:
+======================
 
 Clinical Assessment:
-[Single most likely diagnosis only. Format:
-Most Likely: [Disease] — [one clinical reason from given symptoms only]
-Do NOT list multiple diseases. Do NOT repeat symptoms. Do NOT invent symptoms not provided.]
+Most Likely: [Diagnosis OR Insufficient data]
 
 Antibiotic Necessity:
-[YES / NO / ANTIMALARIAL / ANTIVIRAL — one short reason. Must match primary diagnosis.]
+[YES / NO — based ONLY on context]
 
 First-Line Therapy:
-[One drug per line. Format: DrugName (Condition). No doses.
-If NO antibiotic: supportive care only — Paracetamol, ORS, Rest, Vitamin C as appropriate.
-If YES antibiotic: safest guideline-based antibiotic first.]
+[Only from PDF Context OR supportive care]
 
 Second-Line Alternatives:
-[If antibiotic YES: 1–2 guideline-based alternatives, one per line.
-If antibiotic NO: write — Not applicable — [reason e.g. viral infection]
-NEVER write an antibiotic here when Antibiotic Necessity = NO.]
+[From context OR "Not applicable"]
 
 Contraindications & Precautions:
-[Drug to avoid — reason. One per line.
-Check allergies and current medications.
-Pregnancy warnings ONLY if pregnancy was explicitly mentioned.
-Write None if nothing applicable.]
+[From context OR "None"]
 
 Recommended Tests:
-[TestName — specific reason. One per line.
-Mild case with clear diagnosis → write: None required — clinical diagnosis sufficient
-Moderate/severe or uncertain → targeted confirmatory tests only, no blanket panels.]
+[From context OR "None required"]
 
 Additional Information Needed:
-[EMERGENCY cases → first line MUST be: EMERGENCY: Immediate hospital referral required.
-Clear mild diagnosis → write: None
-Otherwise → max 2 missing details that would change management.]
+[Max 2 questions OR "None"]
 
 ========================
-MANDATORY CONSISTENCY RULES
-========================
-- Malaria / Dengue / Viral Fever / Influenza / Common Cold → Antibiotic MUST be NO
-- If Antibiotic = NO → zero antibiotics in First-Line AND Second-Line
-- Treatment must match primary diagnosis only — no mixing
-- Never add symptoms not given by user
-- If symptoms are too vague (e.g. only "fever") → Clinical Assessment MUST be: Most Likely: Unspecified Fever — insufficient symptoms for diagnosis. Ask user to provide more details like duration, associated symptoms, severity.
-- Never invent rash, cough, pain or any symptom not explicitly mentioned by user
-- Never leave a section empty — use None or Not applicable
-- Never use ** ## or bullet dashes — plain text only
-- Follow exact section headers above
+MANDATORY SAFETY CHECK
+======================
 
-PYELONEPHRITIS vs UTI (CRITICAL):
-- Fever + vomiting + back pain/flank pain + urinary symptoms → PRIMARY = Pyelonephritis
-- Nitrofurantoin PROHIBITED in Pyelonephritis — ineffective in kidney tissue
-- Pyelonephritis → Co-amoxiclav oral or Ceftriaxone IV (severe)
-- Simple UTI (no fever, no systemic symptoms) → Nitrofurantoin acceptable
+Before final answer:
 
-PREGNANCY SAFETY (only if explicitly mentioned):
-- Nitrofurantoin → trimester unknown → prefer Cefalexin instead
-- Azithromycin → Category B → safe, preferred for pneumonia
-- Clarithromycin → Category C → AVOID, flag in contraindications
-- Fluoroquinolones, Tetracyclines, Trimethoprim, NSAIDs → AVOID
+* Is diagnosis present in PDF? If NO → reject
+* Are symptoms matched exactly? If NO → reject
+* Are antibiotics justified by PDF? If NO → reject
 
-PNEUMONIA ANTIBIOTIC DECISION:
-- High fever + chest pain + breathlessness + productive cough → bacterial → antibiotic YES
-- Fatigue + body ache + mild cough only → viral first → no antibiotic without X-Ray confirmation
-- Always recommend Chest X-Ray as first test for suspected pneumonia
+If ANY check fails:
+→ Return INSUFFICIENT DATA
 
-SEPTIC SHOCK (MANDATORY):
-- Fever + confusion + low BP + fast breathing → Septic Shock
-- Assessment MUST start: EMERGENCY: Immediate hospital referral required.
-- First-Line MUST include IV antibiotics + IV fluids + vasopressors if BP unresponsive
-- Additional Info MUST say: EMERGENCY — ICU admission required immediately
-
-DIABETIC PATIENTS:
-- Flag Ciprofloxacin interaction risk if patient is diabetic on relevant medications
-- Prefer safer alternatives where possible
-
-CHILD PATIENTS:
-- Avoid Aspirin — Reye's syndrome risk
-- Avoid Fluoroquinolones in children under 18
-- Dose adjustments may be needed — flag this in Additional Information Needed
-"""
-
-    response = None
-    last_raw = None
-    for i in range(3):
-        raw = call_llm(llm_prompt)
-        if raw and not raw.startswith("ERROR"):
-            last_raw = raw
-            if validate_response(raw):
-                response = raw
-                break
-            print(f"⚠️ Retry {i+1}: validation failed")
-        else:
-            import time
-            time.sleep(10)  # 10 second wait before retry
-
-    # Agar validation pass nahi hua lekin LLM ne kuch meaningful diya → use karo
-    if not response:
-        if last_raw and len(last_raw.strip()) > 100:
-            print("⚠️ Using last LLM response despite validation failure")
-            response = last_raw
-        else:
-            response = """Clinical Assessment:
-Unable to determine diagnosis. Please consult a doctor immediately.
-
-Antibiotic Necessity:
-NO — Insufficient information to make a safe antibiotic decision.
-
-First-Line Therapy:
-Paracetamol (fever and pain relief) | ORS (hydration) | Rest
-
-Second-Line Alternatives:
-Not applicable — insufficient clinical information
-
-Contraindications & Precautions:
-Do not self-medicate without professional medical evaluation.
-
-Recommended Tests:
-Complete Blood Count (CBC) — Basic infection screening
-
-Additional Information Needed:
-Please provide full symptom history, duration, and severity to enable proper diagnosis.
 """
 
     response = safety_filter(response)
