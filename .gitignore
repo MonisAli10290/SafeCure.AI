@@ -5,3 +5,4 @@ __pycache__/
 faiss_index/
 *.bin
 *.pkl
+static/*.mp3

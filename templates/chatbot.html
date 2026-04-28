@@ -2178,7 +2178,11 @@
                     body: JSON.stringify({
                         condition: condition,
                         allergies: allergies || "None reported",
-                        medications: medications || "None reported"
+                        medications: medications || "None reported",
+                        age: document.getElementById('age').value.trim() || "Not specified",
+                        pregnancy: document.getElementById('pregnancy').value,
+                        diabetes: document.getElementById('diabetes').value,
+                        renal_issues: document.getElementById('renal_issues').value
                     })
                 });
 
