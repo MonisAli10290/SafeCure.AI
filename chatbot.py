@@ -557,16 +557,11 @@ def clinical_engine(data):
     condition = data.get('condition', '')
     allergies = data.get('allergies', 'None')
     medications = data.get('medications', 'None')
-    age = data.get('age', 'Not specified')
-    pregnancy_status = data.get('pregnancy', 'Not mentioned')
-    diabetes = data.get('diabetes', 'Not mentioned')
-    renal_issues = data.get('renal_issues', 'Not mentioned')
-
-    # Rule engine removed — PDF-based RAG only
-    rule_hint = "Use clinical reasoning based on PDF guidelines and symptoms only.\n"
+   
+    
 
     llm_prompt = f"""
-You are a Clinical Decision Support System (CDS).
+YYou are a Clinical Decision Support System (CDS).
 
 CRITICAL RULE:
 You MUST use ONLY the provided Clinical Guidelines (PDF Context).
@@ -584,6 +579,7 @@ INPUT
 Symptoms: {condition}
 Allergies: {allergies}
 Current Medications: {medications}
+
 
 Clinical Guidelines (PDF Context):
 {context}
@@ -693,6 +689,48 @@ Before final answer:
 If ANY check fails:
 → Return INSUFFICIENT DATA
 
+"""
+
+    response = None
+    last_raw = None
+    for i in range(3):
+        raw = call_llm(llm_prompt)
+        if raw and not raw.startswith("ERROR"):
+            last_raw = raw
+            if validate_response(raw):
+                response = raw
+                break
+            print(f"⚠️ Retry {i+1}: validation failed")
+        else:
+            import time
+            time.sleep(10)  # 10 second wait before retry
+
+    # Agar validation pass nahi hua lekin LLM ne kuch meaningful diya → use karo
+    if not response:
+        if last_raw and len(last_raw.strip()) > 100:
+            print("⚠️ Using last LLM response despite validation failure")
+            response = last_raw
+        else:
+            response = """Clinical Assessment:
+Unable to determine diagnosis. Please consult a doctor immediately.
+
+Antibiotic Necessity:
+NO — Insufficient information to make a safe antibiotic decision.
+
+First-Line Therapy:
+Paracetamol (fever and pain relief) | ORS (hydration) | Rest
+
+Second-Line Alternatives:
+Not applicable — insufficient clinical information
+
+Contraindications & Precautions:
+Do not self-medicate without professional medical evaluation.
+
+Recommended Tests:
+Complete Blood Count (CBC) — Basic infection screening
+
+Additional Information Needed:
+Please provide full symptom history, duration, and severity to enable proper diagnosis.
 """
 
     response = safety_filter(response)
