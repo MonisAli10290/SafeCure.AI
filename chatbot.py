@@ -1234,7 +1234,10 @@ def database_page():
 if __name__ == '__main__':
     print("🚀 Initializing Safecure AI...")
     init_db()
-    get_vectorstore()
+    try:
+        get_vectorstore()
+    except Exception as e:
+        print(f"⚠️ Vectorstore warning: {e}")
     print("✅ Ready! Visit http://localhost:5000")
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port,debug=False)
+    app.run(host='0.0.0.0', port=port, debug=False)
