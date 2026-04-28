@@ -562,48 +562,13 @@ def clinical_engine(data):
     diabetes = data.get('diabetes', 'Not mentioned')
     renal_issues = data.get('renal_issues', 'Not mentioned')
 
-    # Run rule engine — pass all patient factors
-    rules = run_rule_engine(condition, allergies, pregnancy_status, diabetes, age)
-    matched = rules["matched_rules"]
-    is_critical = rules["is_critical"]
-    allergy_warnings = rules["allergy_warnings"]
-
-    # Septic Shock override — if critical AND confusion + hypotension present → force emergency
-    septic_flags = ["confusion", "low blood pressure", "hypotension", "fast breathing", "sepsis", "septic"]
-    septic_hit = sum(1 for kw in septic_flags if kw in condition.lower())
-    is_septic_shock = septic_hit >= 2
-
-    # Build rule hints for LLM
-    rule_hint = ""
-    if is_critical:
-        rule_hint += "CRITICAL EMERGENCY DETECTED — Recommend immediate hospital referral.\n"
-    if is_septic_shock:
-        rule_hint += (
-            "SEPTIC SHOCK PATTERN DETECTED — MANDATORY RULES:\n"
-            "  1. Clinical Assessment MUST start with: EMERGENCY: Immediate hospital referral required.\n"
-            "  2. First-Line MUST include: IV Broad-Spectrum Antibiotics (Piperacillin-Tazobactam or Meropenem — hospital only)\n"
-            "  3. First-Line MUST include: IV Fluid Resuscitation (Normal Saline bolus)\n"
-            "  4. First-Line MUST include: Vasopressors if BP not responding (Norepinephrine — ICU only)\n"
-            "  5. Additional Information Needed MUST say: EMERGENCY — ICU admission required immediately.\n"
-        )
-    if matched:
-        rule_hint += "\nRule Engine Pre-Analysis (HIGH CONFIDENCE — follow unless contradicted):\n"
-        for r in matched:
-            rule_hint += f"  Disease: {r['name']}\n"
-            rule_hint += f"  Antibiotic: {r['antibiotic']}\n"
-            rule_hint += f"  First-Line: {', '.join(r['first_line'][:3])}\n"
-            rule_hint += f"  Key Tests: {', '.join(r['tests'][:3])}\n"
-            rule_hint += f"  Avoid: {', '.join(r['avoid'][:3])}\n\n"
-    if allergy_warnings:
-        rule_hint += "Allergy Alerts:\n" + "\n".join(f"  - {w}" for w in allergy_warnings) + "\n"
-    if not matched:
-        rule_hint += "No strong pattern match. Use clinical reasoning based on symptoms only.\n"
+    # Rule engine removed — PDF-based RAG only
+    rule_hint = "Use clinical reasoning based on PDF guidelines and symptoms only.\n"
 
     llm_prompt = f"""
 You are a senior physician and clinical decision support system (CDS).
 
-IMPORTANT: The Rule Engine below has pre-analyzed this case. You MUST follow it unless you have strong clinical reason to deviate.
-
+IMPORTANT: Base your diagnosis STRICTLY on the Clinical Guidelines from PDF context below and the patient's symptoms. Do NOT use hardcoded rules.
 ========================
 RULE ENGINE OUTPUT
 ========================
