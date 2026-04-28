@@ -4,6 +4,7 @@ Safecure AI is an AI-powered clinical decision support system designed to provid
 
 ---
 
+
 ## 🚀 Key Features
 
 - 🔍 **Symptom-Based Diagnosis**  

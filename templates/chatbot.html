@@ -1,0 +1,3129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safecure AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animateCircle 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        @keyframes animateCircle {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo i {
+            font-size: 55px;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.4rem;
+            margin-top: 8px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* ── Language Toggle ── */
+        .lang-toggle {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+            gap: 0;
+        }
+
+        .lang-btn {
+            padding: 7px 22px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .lang-btn:first-child {
+            border-radius: 30px 0 0 30px;
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .lang-btn:last-child {
+            border-radius: 0 30px 30px 0;
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.15);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-area {
+            padding: 35px 40px 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        label i {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        textarea,
+        input[type="text"],
+        input:not([type="button"]) {
+            width: 100%;
+            padding: 11px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            color: #333;
+        }
+
+        textarea:focus,
+        input[type="text"]:focus,
+        input:not([type="button"]):focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+            background: white;
+        }
+
+        /* ── Voice Input Section ── */
+        .voice-section {
+            background: linear-gradient(135deg, #f0f4ff 0%, #f8f0ff 100%);
+            border: 2px dashed #c4b5fd;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .voice-section-title {
+            font-weight: 700;
+            color: #555;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .voice-section-title i {
+            color: #667eea;
+        }
+
+        /* ── Mic Button ── */
+        .mic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mic-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Wave rings */
+        .wave-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            width: 80px;
+            height: 80px;
+            animation: none;
+            opacity: 0;
+        }
+
+        .wave-ring:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .wave-ring:nth-child(2) {
+            animation-delay: 0.35s;
+        }
+
+        .wave-ring:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes waveExpand {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(2.4);
+                opacity: 0;
+            }
+        }
+
+        .mic-wrapper.listening .wave-ring {
+            animation: waveExpand 1.1s ease-out infinite;
+        }
+
+        .mic-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.25s ease;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.07);
+            box-shadow: 0 8px 28px rgba(102, 126, 234, 0.6);
+        }
+
+        .mic-btn:active {
+            transform: scale(0.95);
+        }
+
+        .mic-btn.listening {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+            animation: micPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes micPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.06);
+            }
+        }
+
+        .mic-status {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #888;
+            min-height: 22px;
+            transition: all 0.3s;
+        }
+
+        .mic-status.listening {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .mic-status.success {
+            color: #28a745;
+        }
+
+        /* Live transcript display */
+        .live-transcript {
+            width: 100%;
+            min-height: 36px;
+            background: white;
+            border-radius: 10px;
+            border: 1.5px solid #e0e0e0;
+            padding: 8px 14px;
+            font-size: 0.88rem;
+            color: #555;
+            font-style: italic;
+            text-align: left;
+            display: none;
+            transition: all 0.3s;
+        }
+
+        .live-transcript.active {
+            display: block;
+            border-color: #667eea;
+        }
+
+        /* ── Speaking Wave (bottom bar when TTS is playing) ── */
+        .speaking-banner {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin-top: 14px;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .speaking-banner.active {
+            display: flex;
+        }
+
+        .speaking-bars {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .speaking-bars span {
+            display: block;
+            width: 4px;
+            border-radius: 2px;
+            background: white;
+            animation: speakBar 0.7s ease-in-out infinite alternate;
+        }
+
+        .speaking-bars span:nth-child(1) {
+            height: 8px;
+            animation-delay: 0s;
+        }
+
+        .speaking-bars span:nth-child(2) {
+            height: 18px;
+            animation-delay: 0.1s;
+        }
+
+        .speaking-bars span:nth-child(3) {
+            height: 13px;
+            animation-delay: 0.2s;
+        }
+
+        .speaking-bars span:nth-child(4) {
+            height: 20px;
+            animation-delay: 0.15s;
+        }
+
+        .speaking-bars span:nth-child(5) {
+            height: 10px;
+            animation-delay: 0.05s;
+        }
+
+        .speaking-bars span:nth-child(6) {
+            height: 16px;
+            animation-delay: 0.25s;
+        }
+
+        .speaking-bars span:nth-child(7) {
+            height: 7px;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes speakBar {
+            from {
+                transform: scaleY(0.4);
+            }
+
+            to {
+                transform: scaleY(1);
+            }
+        }
+
+        /* Stop / Replay TTS buttons */
+        .stop-tts-btn,
+        .replay-tts-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            color: white;
+            padding: 3px 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .stop-tts-btn:hover,
+        .replay-tts-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .replay-tts-btn {
+            display: none;
+        }
+
+        .replay-tts-btn.visible {
+            display: inline-block;
+        }
+
+        /* ── Analyze button ── */
+        .analyze-btn {
+            width: 100%;
+            padding: 15px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(102, 126, 234, 0.3), 0 0 10px rgba(102, 126, 234, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.4);
+            }
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            animation: none;
+        }
+
+        .analyze-btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-content i {
+            font-size: 1.2rem;
+        }
+
+        .db-btn {
+            width: 100%;
+            padding: 12px 24px;
+            background: rgba(102, 126, 234, 0.08);
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .db-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Processing Overlay */
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .processing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .double-bounce1,
+        .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-bounce 2s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+            animation-delay: -1s;
+        }
+
+        @keyframes sk-bounce {
+
+            0%,
+            100% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .processing-steps {
+            margin-top: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            padding: 10px 14px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            opacity: 0.5;
+            transform: translateX(-10px);
+            transition: all 0.5s ease;
+        }
+
+        .step.active {
+            opacity: 1;
+            transform: translateX(0);
+            background: #f0f4ff;
+        }
+
+        .step i {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        /* Output Area */
+        .output-area {
+            padding: 0 40px 40px;
+        }
+
+        .patient-id-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 14px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            animation: cardSlide 0.4s ease-out both;
+        }
+
+        @keyframes cardSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.09);
+        }
+
+        .result-card h4 {
+            color: #555;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .critical-banner {
+            background: #fff0f0;
+            border: 2px solid #e74c3c;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: cardSlide 0.4s ease-out both;
+        }
+
+        .critical-banner i {
+            color: #e74c3c;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .critical-banner h4 {
+            color: #c0392b;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .critical-banner p {
+            color: #c0392b;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .info-request-banner {
+            background: #fffbf0;
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            animation: cardSlide 0.4s ease-out both;
+        }
+
+        .info-request-banner h4 {
+            color: #e67e22;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+        }
+
+        .drug-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #efefef;
+        }
+
+        .drug-item:last-child {
+            border-bottom: none;
+        }
+
+        .drug-item i {
+            font-size: 0.9rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .drug-item span {
+            color: #333;
+            line-height: 1.55;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width:640px) {
+
+            .form-area,
+            .output-area {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ══════════════════════════════════════
+           MODE TABS
+        ══════════════════════════════════════ */
+        .mode-tabs {
+            display: flex;
+            background: #f0f2ff;
+            margin: 0;
+            border-bottom: 2px solid #e0e4ff;
+        }
+
+        .mode-tab {
+            flex: 1;
+            padding: 14px 10px;
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.25s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .mode-tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            background: white;
+        }
+
+        .mode-tab:hover:not(.active) {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* ══════════════════════════════════════
+           DOCTOR CHAT UI
+        ══════════════════════════════════════ */
+        #chatPanel {
+            display: none;
+        }
+
+        #formPanel {
+            display: block;
+        }
+
+        .chat-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 620px;
+            padding: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            animation: bubbleIn 0.3s ease-out;
+        }
+
+        @keyframes bubbleIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bubble-doctor {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .bubble-user {
+            background: #f0f2f8;
+            color: #333;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .bubble-meta {
+            font-size: 0.72rem;
+            opacity: 0.65;
+            margin-top: 4px;
+        }
+
+        .bubble-typing {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            padding: 14px 18px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            animation: typingBounce 1.2s ease-in-out infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+            padding: 14px 20px;
+            border-top: 2px solid #f0f0f0;
+            background: #fafafa;
+            align-items: flex-end;
+        }
+
+        .chat-input-row textarea {
+            flex: 1;
+            resize: none;
+            min-height: 44px;
+            max-height: 110px;
+            border-radius: 22px;
+            padding: 11px 18px;
+            font-size: 0.92rem;
+            border: 2px solid #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.4;
+            transition: border-color 0.2s;
+            background: white;
+        }
+
+        .chat-input-row textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .chat-send-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.15rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.6);
+        }
+
+        .chat-send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chat-mic-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #667eea;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .chat-mic-btn:hover {
+            background: #e0e4ff;
+        }
+
+        .chat-mic-btn.listening {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            animation: micPulse 0.8s ease-in-out infinite;
+        }
+
+        .chat-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 20px;
+            background: #f7f8ff;
+            border-bottom: 1px solid #e8eaff;
+            font-size: 0.78rem;
+        }
+
+        .doctor-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .chat-reset-btn {
+            background: none;
+            border: 1.5px solid #ddd;
+            border-radius: 20px;
+            color: #999;
+            padding: 3px 12px;
+            font-size: 0.76rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .chat-reset-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .chat-audio-bar {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .chat-audio-bar.active {
+            display: flex;
+        }
+
+        .chat-stop-audio {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            color: white;
+            padding: 2px 10px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Mic preview bar */
+        .chat-mic-preview {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            background: #f0f4ff;
+            border-top: 2px solid #c4b5fd;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-mic-confirm {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .chat-mic-confirm:hover {
+            opacity: 0.9;
+        }
+
+        .chat-mic-discard {
+            background: none;
+            border: 1.5px solid #ddd;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #999;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .chat-mic-discard:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        /* ══════════════════════════════════════
+           DR. SAFECURE AVATAR
+        ══════════════════════════════════════ */
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 20px 0;
+            background: linear-gradient(180deg, #f7f8ff 0%, #ffffff 100%);
+            border-bottom: 1px solid #e8eaff;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        /* Glow ring behind avatar */
+        .avatar-glow {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: conic-gradient(#667eea, #764ba2, #667eea);
+            opacity: 0.35;
+            animation: glowSpin 4s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes glowSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .avatar-glow.speaking {
+            opacity: 0.85;
+            animation: glowSpin 1.2s linear infinite;
+        }
+
+        .avatar-glow.listening {
+            opacity: 0.6;
+            background: conic-gradient(#e74c3c, #f39c12, #e74c3c);
+            animation: glowSpin 2s linear infinite;
+        }
+
+        #doctorCanvas {
+            position: relative;
+            z-index: 1;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 6px 20px rgba(102, 126, 234, 0.4));
+        }
+
+        #doctorCanvas.state-idle {
+            transform: rotate(0deg);
+        }
+
+        #doctorCanvas.state-listening {
+            transform: rotate(-30deg);
+        }
+
+        #doctorCanvas.state-speaking {
+            transform: rotate(0deg);
+        }
+
+        /* Sound waves from ear side when listening */
+        .ear-waves {
+            position: absolute;
+            right: -2px;
+            top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+        }
+
+        .ear-waves.active {
+            opacity: 1;
+        }
+
+        .ear-wave {
+            width: 14px;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #e74c3c, transparent);
+            animation: earWave 0.6s ease-in-out infinite alternate;
+        }
+
+        .ear-wave:nth-child(1) {
+            width: 10px;
+            animation-delay: 0s;
+        }
+
+        .ear-wave:nth-child(2) {
+            width: 14px;
+            animation-delay: 0.15s;
+        }
+
+        .ear-wave:nth-child(3) {
+            width: 8px;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes earWave {
+            from {
+                opacity: 0.3;
+                transform: scaleX(0.6);
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        /* Speaking sound waves from mouth */
+        .mouth-waves {
+            position: absolute;
+            left: -2px;
+            top: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+        }
+
+        .mouth-waves.active {
+            opacity: 1;
+        }
+
+        .mouth-wave {
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(270deg, #667eea, transparent);
+            animation: mouthWave 0.4s ease-in-out infinite alternate;
+        }
+
+        .mouth-wave:nth-child(1) {
+            width: 12px;
+            animation-delay: 0s;
+        }
+
+        .mouth-wave:nth-child(2) {
+            width: 16px;
+            animation-delay: 0.1s;
+        }
+
+        .mouth-wave:nth-child(3) {
+            width: 10px;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes mouthWave {
+            from {
+                opacity: 0.4;
+                transform: scaleX(0.5);
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        .avatar-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #888;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 6px;
+            transition: color 0.3s;
+            text-align: center;
+        }
+
+        .avatar-label.listening {
+            color: #e74c3c;
+        }
+
+        .avatar-label.speaking {
+            color: #667eea;
+        }
+
+        .avatar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="animated-bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="glass-card">
+
+            <div class="header">
+                <div class="logo">
+                    <i class="bi bi-heart-pulse-fill"></i>
+                    <h1>Safecure AI</h1>
+                    <p id="appSubtitle">Neural Clinical Intelligence Platform</p>
+                </div>
+                <!-- Language Toggle -->
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="btnEn" onclick="setLang('en')">English</button>
+                    <button class="lang-btn" id="btnHi" onclick="setLang('hi')">हिंदी</button>
+                </div>
+            </div>
+
+            <!-- Mode Tabs -->
+            <div class="mode-tabs">
+                <button class="mode-tab active" id="tabForm" onclick="switchMode('form')">
+                    <i class="bi bi-ui-checks"></i> <span id="tabFormLabel">Form Analysis</span>
+                </button>
+                <button class="mode-tab" id="tabChat" onclick="switchMode('chat')">
+                    <i class="bi bi-chat-heart-fill"></i> <span id="tabChatLabel">Talk to Doctor AI</span>
+                </button>
+            </div>
+
+            <!-- ═══════════════════════════════════
+             DOCTOR CHAT PANEL
+        ═══════════════════════════════════ -->
+            <div id="chatPanel">
+                <div class="chat-wrapper">
+                    <!-- Toolbar -->
+                    <div class="chat-toolbar">
+                        <div class="doctor-status">
+                            <div class="status-dot"></div>
+                            <i class="bi bi-person-badge-fill"></i>
+                            <span id="chatDoctorLabel">Dr. Safecure — AI Physician</span>
+                        </div>
+                        <button class="chat-reset-btn" onclick="resetChat()">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                            <span id="newConsultLabel">New Consultation</span>
+                        </button>
+                    </div>
+
+                    <!-- ── Dr. Safecure Avatar ── -->
+
+
+                    <!-- Audio playing bar -->
+                    <div class="chat-audio-bar" id="chatAudioBar">
+                        <div class="speaking-bars" style="height:16px;">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                        <span id="chatAudioLabel">Dr. Safecure is speaking…</span>
+                        <button class="chat-stop-audio" onclick="stopChatAudio()">⏹ Stop &amp; Reply</button>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="chat-messages" id="chatMessages"></div>
+
+                    <!-- Mic preview bar (shown when voice captured, before send) -->
+                    <div class="chat-mic-preview" id="chatMicPreview" style="display:none;">
+                        <i class="bi bi-mic-fill" style="color:#667eea;"></i>
+                        <span id="chatMicPreviewText"
+                            style="flex:1;font-size:0.85rem;color:#333;font-style:italic;"></span>
+                        <button class="chat-mic-confirm" onclick="confirmMicSend()">
+                            <i class="bi bi-send-fill"></i> Send
+                        </button>
+                        <button class="chat-mic-discard" onclick="discardMicInput()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Input row -->
+                    <div class="chat-input-row">
+                        <button class="chat-mic-btn" id="chatMicBtn" onclick="toggleChatMic()" title="Speak">
+                            <i class="bi bi-mic-fill" id="chatMicIcon"></i>
+                        </button>
+                        <textarea id="chatInput" rows="1" placeholder="Type your message or tap the mic…"
+                            onkeydown="chatKeyDown(event)" oninput="autoResizeChat(this)"></textarea>
+                        <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="formPanel">
+                <div class="form-area">
+
+                    <!-- ── Voice Input Section ── -->
+                    <div class="voice-section">
+                        <div class="voice-section-title">
+                            <i class="bi bi-mic-fill"></i>
+                            <span id="voiceSectionLabel">Voice Input — Click mic to speak symptoms</span>
+                        </div>
+                        <div class="mic-container">
+                            <div class="mic-wrapper" id="micWrapper">
+                                <div class="wave-ring"></div>
+                                <div class="wave-ring"></div>
+                                <div class="wave-ring"></div>
+                                <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Click to speak">
+                                    <i class="bi bi-mic-fill" id="micIcon"></i>
+                                </button>
+                            </div>
+                            <div class="mic-status" id="micStatus">Tap mic to start speaking</div>
+                            <div class="live-transcript" id="liveTranscript"></div>
+                        </div>
+                    </div>
+
+                    <!-- Speaking Banner (shown during TTS) -->
+                    <div class="speaking-banner" id="speakingBanner">
+                        <div class="speaking-bars">
+                            <span></span><span></span><span></span><span></span>
+                            <span></span><span></span><span></span>
+                        </div>
+                        <span id="speakingLabel">AI is speaking…</span>
+                        <button class="stop-tts-btn" id="stopTtsBtn" onclick="stopSpeaking()">⏹ Stop</button>
+                        <button class="replay-tts-btn" id="replayTtsBtn" onclick="replaySpeaking()">▶ Replay</button>
+                    </div>
+
+                    <div class="input-group">
+                        <label><i class="bi bi-activity"></i> <span id="lblSymptoms">Symptoms / Condition</span></label>
+                        <textarea id="condition" rows="4"
+                            placeholder="Describe all symptoms in detail — e.g. High fever since 3 days, severe headache, body aches, joint pain, rash on chest..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label><i class="bi bi-shield-exclamation"></i> <span
+                                    id="lblAllergies">Allergies</span></label>
+                            <input id="allergies" type="text" placeholder="e.g. Penicillin, Sulfa (or None)">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="bi bi-capsule"></i> <span id="lblMeds">Current Medications</span></label>
+                            <input id="medications" type="text"
+                                placeholder="e.g. Metformin 500mg, Lisinopril 10mg (or None)">
+                        </div>
+                    </div>
+
+                    <button class="analyze-btn" onclick="analyzeCase()">
+                        <div class="btn-content">
+                            <i class="bi bi-cpu-fill"></i>
+                            <span id="btnAnalyzeLabel">Analyze Clinical Case</span>
+                            <i class="bi bi-arrow-right-circle-fill"></i>
+                        </div>
+                    </button>
+
+                    <button class="db-btn" onclick="window.open('/database','_blank')">
+                        <div class="btn-content">
+                            <i class="bi bi-database-fill"></i>
+                            <span id="btnDbLabel">View Patient Database</span>
+                            <i class="bi bi-arrow-up-right-square"></i>
+                        </div>
+                    </button>
+
+                </div>
+
+                <div id="output" class="output-area"></div>
+            </div><!-- end formPanel -->
+        </div>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div id="processingOverlay" class="processing-overlay">
+        <div class="processing-card">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+            <h3 style="color:#333; font-size:1.05rem;" id="overlayTitle">Clinical Analysis in Progress</h3>
+            <div class="processing-steps">
+                <div class="step" id="step1"><i class="bi bi-database"></i><span id="step1Label">Retrieving medical
+                        guidelines...</span></div>
+                <div class="step" id="step2"><i class="bi bi-shield-check"></i><span id="step2Label">Checking allergies
+                        & interactions...</span></div>
+                <div class="step" id="step3"><i class="bi bi-robot"></i><span id="step3Label">Generating clinical
+                        recommendations...</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ══════════════════════════════════════════
+        // LANGUAGE CONFIG
+        // ══════════════════════════════════════════
+        let currentLang = 'en';
+
+        const STRINGS = {
+            en: {
+                voiceSectionLabel: 'Voice Input — Click mic to speak symptoms',
+                micStatusIdle: 'Tap mic to start speaking',
+                micStatusListening: 'Listening… speak now',
+                micStatusDone: 'Voice captured! You can edit below.',
+                micStatusError: 'Mic error. Please try again or type manually.',
+                lblSymptoms: 'Symptoms / Condition',
+                lblAllergies: 'Allergies',
+                lblMeds: 'Current Medications',
+                btnAnalyzeLabel: 'Analyze Clinical Case',
+                btnDbLabel: 'View Patient Database',
+                overlayTitle: 'Clinical Analysis in Progress',
+                step1: 'Retrieving medical guidelines...',
+                step2: 'Checking allergies & interactions...',
+                step3: 'Generating clinical recommendations...',
+                speakingLabel: 'AI is speaking…',
+                missingInfo: 'Missing Information',
+                missingMsg: 'Please enter the patient\'s symptoms or condition to proceed.',
+                serverError: 'Server Error',
+                connError: 'Connection Error',
+                connMsg: 'Failed to connect to the AI engine. Please ensure the backend server is running.',
+                ttsLang: 'en-US',
+                analyzeBtn: 'Analyze Clinical Case',
+                dbBtn: 'View Patient Database',
+                newConsultation: 'New Consultation',
+                stopReply: '⏹ Stop & Reply',
+                appSubtitle: 'Neural Clinical Intelligence Platform',
+                tabForm: 'Form Analysis',
+                tabChat: 'Talk to Doctor AI',
+            },
+            hi: {
+                voiceSectionLabel: 'वॉइस इनपुट — माइक दबाकर लक्षण बोलें',
+                micStatusIdle: 'माइक दबाएं और बोलना शुरू करें',
+                micStatusListening: 'सुन रहा है… अभी बोलें',
+                micStatusDone: 'आवाज़ रिकॉर्ड हो गई! नीचे संपादित कर सकते हैं।',
+                micStatusError: 'माइक में समस्या। दोबारा प्रयास करें या टाइप करें।',
+                lblSymptoms: 'लक्षण / बीमारी',
+                lblAllergies: 'एलर्जी',
+                lblMeds: 'वर्तमान दवाइयां',
+                btnAnalyzeLabel: 'क्लिनिकल केस का विश्लेषण करें',
+                btnDbLabel: 'मरीज़ डेटाबेस देखें',
+                overlayTitle: 'विश्लेषण जारी है...',
+                step1: 'चिकित्सा दिशा-निर्देश प्राप्त कर रहे हैं...',
+                step2: 'एलर्जी और दवा जाँच रहे हैं...',
+                step3: 'क्लिनिकल सुझाव तैयार कर रहे हैं...',
+                speakingLabel: 'AI बोल रहा है…',
+                missingInfo: 'जानकारी अधूरी है',
+                missingMsg: 'कृपया मरीज़ के लक्षण या बीमारी दर्ज करें।',
+                serverError: 'सर्वर त्रुटि',
+                connError: 'कनेक्शन त्रुटि',
+                connMsg: 'AI इंजन से कनेक्ट नहीं हो पाया। कृपया बैकेंड सर्वर चालू करें।',
+                ttsLang: 'hi-IN',
+                analyzeBtn: 'क्लिनिकल केस का विश्लेषण करें',
+                dbBtn: 'मरीज़ डेटाबेस देखें',
+                newConsultation: 'नई परामर्श',
+                stopReply: '⏹ रोकें और जवाब दें',
+                appSubtitle: 'न्यूरल क्लिनिकल इंटेलिजेंस प्लेटफॉर्म',
+                tabForm: 'फॉर्म विश्लेषण',
+                tabChat: 'डॉक्टर AI से बात करें',
+            },
+
+        };
+
+        function t(key) { return STRINGS[currentLang][key] || STRINGS['en'][key]; }
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+            document.getElementById('btnHi').classList.toggle('active', lang === 'hi');
+
+            document.getElementById('appSubtitle').textContent = t('appSubtitle');
+            document.getElementById('tabFormLabel').textContent = t('tabForm');
+            document.getElementById('tabChatLabel').textContent = t('tabChat');
+            // Update all UI strings
+            document.getElementById('voiceSectionLabel').textContent = t('voiceSectionLabel');
+            document.getElementById('micStatus').textContent = t('micStatusIdle');
+            document.getElementById('lblSymptoms').textContent = t('lblSymptoms');
+            document.getElementById('lblAllergies').textContent = t('lblAllergies');
+            document.getElementById('lblMeds').textContent = t('lblMeds');
+            document.getElementById('btnAnalyzeLabel').textContent = t('btnAnalyzeLabel');
+            document.getElementById('btnDbLabel').textContent = t('btnDbLabel');
+            document.getElementById('overlayTitle').textContent = t('overlayTitle');
+            document.getElementById('step1Label').textContent = t('step1');
+            document.getElementById('step2Label').textContent = t('step2');
+            document.getElementById('step3Label').textContent = t('step3');
+            document.getElementById('speakingLabel').textContent = t('speakingLabel');
+            // Placeholders update karo
+            document.getElementById('condition').placeholder = lang === 'hi'
+                ? 'सभी लक्षण विस्तार से बताएं — जैसे: 3 दिन से तेज़ बुखार, सिरदर्द, शरीर दर्द...'
+                : 'Describe all symptoms in detail — e.g. High fever since 3 days, severe headache, body aches...';
+
+            document.getElementById('allergies').placeholder = lang === 'hi'
+                ? 'जैसे: पेनिसिलिन, सल्फा (या कोई नहीं)'
+                : 'e.g. Penicillin, Sulfa (or None)';
+
+            document.getElementById('medications').placeholder = lang === 'hi'
+                ? 'जैसे: मेटफॉर्मिन, लिसिनोप्रिल (या कोई नहीं)'
+                : 'e.g. Metformin 500mg, Lisinopril 10mg (or None)';
+
+            // Buttons text
+            document.getElementById('btnAnalyzeLabel').textContent = t('btnAnalyzeLabel');
+            document.getElementById('btnDbLabel').textContent = t('btnDbLabel');
+
+            // Overlay steps
+            document.getElementById('overlayTitle').textContent = t('overlayTitle');
+            document.getElementById('step1Label').textContent = t('step1');
+            document.getElementById('step2Label').textContent = t('step2');
+            document.getElementById('step3Label').textContent = t('step3');
+
+            // Chat panel
+            document.getElementById('chatDoctorLabel').textContent = lang === 'hi'
+                ? 'Dr. Safecure — AI चिकित्सक'
+                : 'Dr. Safecure — AI Physician';
+            document.getElementById('chatInput').placeholder = lang === 'hi'
+                ? 'अपना संदेश टाइप करें या माइक दबाएं…'
+                : 'Type your message or tap the mic…';
+            document.getElementById('chatAudioLabel').textContent = lang === 'hi'
+                ? 'Dr. Safecure बोल रहे हैं…'
+                : 'Dr. Safecure is speaking…';
+            document.getElementById('newConsultLabel').textContent = lang === 'hi' ? 'नई परामर्श' : 'New Consultation';
+
+            // Update SpeechRecognition language if active
+            if (recognition) recognition.lang = t('ttsLang');
+
+            // Update chat UI
+            const chatDoctorLabel = document.getElementById('chatDoctorLabel');
+            if (chatDoctorLabel) chatDoctorLabel.textContent = lang === 'hi' ? 'Dr. Safecure — AI चिकित्सक' : 'Dr. Safecure — AI Physician';
+            const chatInputEl = document.getElementById('chatInput');
+            if (chatInputEl) chatInputEl.placeholder = lang === 'hi' ? 'अपना संदेश टाइप करें या माइक दबाएं…' : 'Type your message or tap the mic…';
+        }
+
+        // ══════════════════════════════════════════
+        // SPEECH RECOGNITION (Voice Input)
+        // ══════════════════════════════════════════
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isListening = false;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isListening = true;
+                document.getElementById('micBtn').classList.add('listening');
+                document.getElementById('micWrapper').classList.add('listening');
+                document.getElementById('micIcon').className = 'bi bi-mic-fill';
+                document.getElementById('micStatus').textContent = t('micStatusListening');
+                document.getElementById('micStatus').className = 'mic-status listening';
+                document.getElementById('liveTranscript').classList.add('active');
+                document.getElementById('liveTranscript').textContent = '…';
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '', final = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const txt = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) final += txt;
+                    else interim += txt;
+                }
+                document.getElementById('liveTranscript').textContent = final || interim;
+                if (final) {
+                    const existing = document.getElementById('condition').value.trim();
+                    document.getElementById('condition').value = existing ? existing + ' ' + final : final;
+                }
+            };
+
+            recognition.onerror = (e) => {
+                resetMic();
+                document.getElementById('micStatus').textContent = t('micStatusError');
+                document.getElementById('micStatus').className = 'mic-status';
+            };
+
+            recognition.onend = () => {
+                if (isListening) {
+                    // Only mark done if we naturally ended (not stopped by user)
+                    isListening = false;
+                    resetMic();
+                    document.getElementById('micStatus').textContent = t('micStatusDone');
+                    document.getElementById('micStatus').className = 'mic-status success';
+                }
+            };
+        }
+
+        function toggleMic() {
+            if (!SpeechRecognition) {
+                alert('Voice input is not supported in your browser. Please use Chrome or Edge.');
+                return;
+            }
+            if (isListening) {
+                recognition.stop();
+                isListening = false;
+                resetMic();
+                document.getElementById('micStatus').textContent = t('micStatusDone');
+                document.getElementById('micStatus').className = 'mic-status success';
+            } else {
+                recognition.lang = t('ttsLang');
+                recognition.start();
+            }
+        }
+
+        function resetMic() {
+            document.getElementById('micBtn').classList.remove('listening');
+            document.getElementById('micWrapper').classList.remove('listening');
+            document.getElementById('micIcon').className = 'bi bi-mic-fill';
+            document.getElementById('liveTranscript').classList.remove('active');
+        }
+
+        // ══════════════════════════════════════════
+        // TEXT-TO-SPEECH (Voice Output) — gTTS based
+        // ══════════════════════════════════════════
+        let currentAudio = null;
+        let lastTTSText = '';
+
+        function stopSpeaking() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+            document.getElementById('speakingBanner').classList.remove('active');
+            document.getElementById('stopTtsBtn').style.display = 'inline-block';
+            document.getElementById('replayTtsBtn').classList.remove('visible');
+        }
+
+        function replaySpeaking() {
+            if (lastTTSText) speakText(lastTTSText);
+        }
+
+        function speakText(text) {
+            if (!text) return;
+            lastTTSText = text;
+
+            // Stop any currently playing audio
+            stopSpeaking();
+
+            const banner = document.getElementById('speakingBanner');
+            const stopBtn = document.getElementById('stopTtsBtn');
+            const replayBtn = document.getElementById('replayTtsBtn');
+
+            // Show banner with "loading" state
+            banner.classList.add('active');
+            document.getElementById('speakingLabel').textContent = t('speakingLabel');
+            stopBtn.style.display = 'inline-block';
+            replayBtn.classList.remove('visible');
+
+            fetch("/tts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error("TTS backend error:", data.error);
+                        banner.classList.remove('active');
+                        return;
+                    }
+                    const audio = new Audio(data.audio_url);
+                    currentAudio = audio;
+
+                    audio.onended = () => {
+                        currentAudio = null;
+                        // Switch banner to "replay" state
+                        document.getElementById('speakingLabel').textContent = '✅ ' + (currentLang === 'hi' ? 'सुनना पूरा हुआ' : 'Done speaking');
+                        document.getElementById('stopTtsBtn').style.display = 'none';
+                        document.getElementById('replayTtsBtn').classList.add('visible');
+                        // Auto-hide banner after 4s
+                        setTimeout(() => {
+                            banner.classList.remove('active');
+                            document.getElementById('replayTtsBtn').classList.remove('visible');
+                            document.getElementById('stopTtsBtn').style.display = 'inline-block';
+                        }, 4000);
+                    };
+
+                    audio.onerror = () => {
+                        currentAudio = null;
+                        banner.classList.remove('active');
+                    };
+
+                    audio.play().catch(err => {
+                        console.error("Audio play error:", err);
+                        banner.classList.remove('active');
+                    });
+                })
+                .catch(err => {
+                    console.error("TTS fetch error:", err);
+                    banner.classList.remove('active');
+                });
+        }
+
+        // Build a plain text summary from the response data for TTS
+        function buildTTSSummary(data) {
+            const lang = currentLang;
+            const assessment = (data.clinical_assessment || []).join(', ');
+            const firstLine = (data.first_line_therapy || []).join(', ');
+            const tests = (data.recommended_tests || []).join(', ');
+            const abx = data.antibiotic_necessity || '';
+
+            if (lang === 'hi') {
+                return `नमस्ते। Safecure AI की ओर से क्लिनिकल रिपोर्ट। ` +
+                    `संभावित बीमारियाँ: ${assessment || 'अज्ञात'}। ` +
+                    `एंटीबायोटिक की जरूरत: ${abx || 'नहीं'}। ` +
+                    `पहली पंक्ति की दवाएं: ${firstLine || 'नहीं'}। ` +
+                    `अनुशंसित जांच: ${tests || 'कोई नहीं'}। ` +
+                    `कृपया अपने डॉक्टर से मिलें।`;
+            } else {
+                return `Hello. Safecure AI clinical report. ` +
+                    `Possible conditions: ${assessment || 'undetermined'}. ` +
+                    `Antibiotic necessity: ${abx || 'not required'}. ` +
+                    `First line therapy: ${firstLine || 'none'}. ` +
+                    `Recommended tests: ${tests || 'none'}. ` +
+                    `Please consult your doctor for a final decision.`;
+            }
+        }
+
+        // ══════════════════════════════════════════
+        // HELPERS
+        // ══════════════════════════════════════════
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+        function buildTestsMessage(testsVal) {
+            if (!testsVal) return 'No specific tests needed at this time.';
+            const items = testsVal.split(',').map(t => t.trim()).filter(Boolean);
+            const urgencyHigh = ['culture', 'biopsy', 'mri', 'ct', 'ecg', 'troponin', 'dengue', 'malaria'];
+            const urgencyMedium = ['cbc', 'esr', 'crp', 'urine', 'sugar', 'glucose', 'thyroid', 'urinalysis'];
+            let out = 'Recommended Tests:\n\n';
+            items.forEach(item => {
+                const lower = item.toLowerCase();
+                let urgency = '🟢 Routine';
+                if (urgencyHigh.some(k => lower.includes(k))) urgency = '🔴 Urgent';
+                else if (urgencyMedium.some(k => lower.includes(k))) urgency = '🟡 Soon (within a week)';
+                const parts = item.split('–');
+                const name = parts[0].trim();
+                const reason = parts[1] ? parts[1].trim() : '';
+                out += `${urgency} — ${name}`;
+                if (reason) out += `\nReason: ${reason}`;
+                out += '\n\n';
+            });
+            return out.trim();
+        }
+
+        function drugList(items, iconClass, iconColor, emptyText) {
+            if (!items || !items.length)
+                return `<p style="color:#aaa;font-style:italic;font-size:0.88rem;">${emptyText}</p>`;
+            return items.map(item => `
+            <div class="drug-item">
+                <i class="${iconClass}" style="color:${iconColor};"></i>
+                <span>${escapeHtml(item)}</span>
+            </div>`).join('');
+        }
+
+        function buildOutput(data) {
+            const assessment = data.clinical_assessment || [];
+            const abxRaw = (data.antibiotic_necessity || "").trim();
+            const firstLine = data.first_line_therapy || [];
+            const secondLine = data.second_line_alternatives || [];
+            const contras = data.contraindications || [];
+            const tests = data.recommended_tests || [];
+            const moreInfo = data.additional_info_needed || [];
+            const patientId = data.patient_id || "";
+
+            const critical = assessment.some(a => a.toUpperCase().includes("CRITICAL"));
+            const abxNeeded = abxRaw.toUpperCase().startsWith("YES");
+            const abxReason = abxRaw.replace(/^(YES|NO)\s*[—\-]?\s*/i, '').trim();
+            const meaningfulInfo = moreInfo.filter(i =>
+                !i.toLowerCase().includes("none") && !i.toLowerCase().includes("sufficient"));
+
+            let html = '';
+
+            if (patientId) {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                html += `<div style="text-align:center;margin-bottom:16px;">
+                       <span class="patient-id-badge">🆔 Patient ID: ${patientId} &nbsp;·&nbsp; ${dateStr} ${timeStr}</span>
+                     </div>`;
+            }
+
+            if (critical) {
+                html += `<div class="critical-banner">
+                       <i class="bi bi-exclamation-octagon-fill"></i>
+                       <div>
+                         <h4>⚠️ CRITICAL — URGENT HOSPITAL REFERRAL REQUIRED</h4>
+                         <p>This case requires immediate emergency medical attention. Please go to the nearest hospital emergency department without delay.</p>
+                       </div>
+                     </div>`;
+            }
+
+            html += `<div class="result-card" style="border-left-color:#667eea;">
+                   <h4><i class="bi bi-clipboard-pulse" style="color:#667eea;"></i> Possible Diseases</h4>
+                   ${assessment.length
+                    ? assessment.map(l =>
+                        `<div class="drug-item">
+                            <i class="bi bi-dot" style="color:#667eea;font-size:1.3rem;"></i>
+                            <span style="font-weight:500;">${escapeHtml(l)}</span>
+                          </div>`).join('')
+                    : '<p style="color:#aaa;font-style:italic;font-size:0.88rem;">No assessment available.</p>'
+                }
+                 </div>`;
+
+            html += `<div class="result-card" style="border-left-color:#28a745;">
+                   <h4><i class="bi bi-star-fill" style="color:#28a745;"></i> First-Line Therapy
+                     <span style="font-size:0.72rem;font-weight:400;color:#999;">(Safest First)</span>
+                   </h4>
+                   ${drugList(firstLine, 'bi bi-check-circle-fill', '#28a745', 'Supportive care: Paracetamol, ORS, Rest')}
+                 </div>`;
+
+            html += `<div class="result-card" style="border-left-color:#ffc107;">
+                   <h4><i class="bi bi-arrow-repeat" style="color:#ffc107;"></i> Second-Line Alternatives</h4>
+                   ${drugList(secondLine, 'bi bi-arrow-right-circle', '#ffc107', 'Not required')}
+                 </div>`;
+
+            html += `<div class="result-card" style="border-left-color:#dc3545;">
+                   <h4><i class="bi bi-exclamation-triangle-fill" style="color:#dc3545;"></i> Contraindications & Precautions</h4>
+                   ${drugList(contras, 'bi bi-x-circle-fill', '#dc3545', 'None based on provided information')}
+                 </div>`;
+
+            html += `<div class="result-card" style="border-left-color:#17a2b8;">
+                   <h4><i class="bi bi-clipboard2-pulse-fill" style="color:#17a2b8;"></i> Recommended Tests</h4>
+                   ${drugList(tests, 'bi bi-eyedropper', '#17a2b8', 'Routine monitoring only')}
+                 </div>`;
+
+            html += `<div class="result-card" style="border-left-color:#adb5bd;background:#fafafa;">
+                   <h4><i class="bi bi-shield-lock-fill" style="color:#adb5bd;"></i> Clinical Disclaimer</h4>
+                   <p style="font-size:0.82rem;color:#999;line-height:1.6;">⚠️ This AI-generated recommendation is for clinical decision support only. It must be verified by a licensed healthcare professional before administration. Always consider patient-specific factors, local resistance patterns, and clinical judgment.</p>
+                 </div>`;
+
+            return html;
+        }
+
+        function animateSteps() {
+            const ids = ['step1', 'step2', 'step3'];
+            let i = 0;
+            const iv = setInterval(() => {
+                if (i < ids.length) { document.getElementById(ids[i]).classList.add('active'); i++; }
+                else clearInterval(iv);
+            }, 1200);
+            return iv;
+        }
+
+        // ══════════════════════════════════════════
+        // MAIN ANALYZE
+        // ══════════════════════════════════════════
+        async function analyzeCase() {
+            const condition = document.getElementById('condition').value.trim();
+            const allergies = document.getElementById('allergies').value.trim();
+            const medications = document.getElementById('medications').value.trim();
+            const output = document.getElementById('output');
+
+            // Stop any ongoing speech
+            stopSpeaking();
+
+            if (!condition) {
+                output.innerHTML = `<div class="result-card" style="border-left-color:#dc3545;">
+                <h4><i class="bi bi-exclamation-circle" style="color:#dc3545;"></i> ${t('missingInfo')}</h4>
+                <p style="color:#666;">${t('missingMsg')}</p></div>`;
+                // Speak the error too
+                speakText(t('missingMsg'));
+                return;
+            }
+
+            const overlay = document.getElementById('processingOverlay');
+            overlay.style.display = 'flex';
+            ['step1', 'step2', 'step3'].forEach(id => document.getElementById(id).classList.remove('active'));
+            const animIv = animateSteps();
+
+            try {
+                const resp = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        condition: condition,
+                        allergies: allergies || "None reported",
+                        medications: medications || "None reported"
+                    })
+                });
+
+                clearInterval(animIv);
+                overlay.style.display = 'none';
+
+                if (!resp.ok) throw new Error(`Server error: ${resp.status}`);
+
+                const data = await resp.json();
+
+                if (data.status === 'error') {
+                    output.innerHTML = `<div class="result-card" style="border-left-color:#dc3545;">
+                    <h4><i class="bi bi-bug" style="color:#dc3545;"></i> ${t('serverError')}</h4>
+                    <p>${escapeHtml(data.message || 'Unknown error occurred.')}</p></div>`;
+                    speakText(data.message || 'Server error occurred.');
+                    return;
+                }
+
+                output.innerHTML = buildOutput(data);
+                output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // ── Auto-speak the summary ──
+                const summary = buildTTSSummary(data);
+                setTimeout(() => speakText(summary), 400);
+
+            } catch (error) {
+                clearInterval(animIv);
+                overlay.style.display = 'none';
+                output.innerHTML = `<div class="result-card" style="border-left-color:#dc3545;">
+                <h4><i class="bi bi-wifi-off" style="color:#dc3545;"></i> ${t('connError')}</h4>
+                <p style="color:#666;">${t('connMsg')}</p>
+                <details style="margin-top:8px;"><summary style="cursor:pointer;color:#999;font-size:0.83rem;">Error details</summary>
+                <code style="font-size:0.78rem;color:#dc3545;">${escapeHtml(error.message)}</code></details></div>`;
+                speakText(t('connMsg'));
+            }
+        }
+
+        // ══════════════════════════════════════════
+        // MODE SWITCHING
+        // ══════════════════════════════════════════
+        function switchMode(mode) {
+            const formPanel = document.getElementById('formPanel');
+            const chatPanel = document.getElementById('chatPanel');
+            const tabForm = document.getElementById('tabForm');
+            const tabChat = document.getElementById('tabChat');
+
+            if (mode === 'chat') {
+                formPanel.style.display = 'none';
+                chatPanel.style.display = 'block';
+                tabChat.classList.add('active');
+                tabForm.classList.remove('active');
+                // Start chat if empty
+                if (chatHistory.length === 0) startChat();
+            } else {
+                formPanel.style.display = 'block';
+                chatPanel.style.display = 'none';
+                tabForm.classList.add('active');
+                tabChat.classList.remove('active');
+            }
+        }
+
+        // ══════════════════════════════════════════
+        // DOCTOR CHAT ENGINE
+        // ══════════════════════════════════════════
+        let chatHistory = [];
+        let chatAudio = null;
+        let chatMicActive = false;
+        let chatRecog = null;
+        let chatMicFinalText = '';
+
+        function resetChat() {
+            chatHistory = [];
+            stopChatAudio();
+            document.getElementById('chatMessages').innerHTML = '';
+            startChat();
+        }
+
+        function startChat() {
+            document.getElementById('chatMicPreview').style.display = 'none';
+            const greeting = currentLang === 'hi'
+                ? 'नमस्ते! मैं Dr. Safecure हूँ। आज आप कैसा महसूस कर रहे हैं? कृपया अपनी तकलीफ बताएं।'
+                : 'Hello! I\'m Dr. Safecure. What brings you in today? Please tell me what\'s been bothering you.';
+            appendDoctorBubble(greeting, false);
+            chatHistory.push({ role: 'assistant', content: greeting });
+            // Speak greeting, then auto-open mic
+            playChatTTS(greeting, null, true);
+        }
+
+        function isFinalAssessment(text) {
+            return text.includes('DIAGNOSIS:') && text.includes('FIRST LINE:');
+        }
+
+        function parseFinalAssessment(text) {
+            const fields = ['DIAGNOSIS', 'FIRST LINE', 'SECOND LINE', 'TESTS', 'AVOID', 'NOTE'];
+            const result = {};
+            fields.forEach((field, i) => {
+                const nextField = fields[i + 1];
+                const regex = nextField
+                    ? new RegExp(field + ':\\s*([\\s\\S]*?)(?=' + nextField + ':)', 'i')
+                    : new RegExp(field + ':\\s*([\\s\\S]*?)$', 'i');
+                const match = text.match(regex);
+                result[field] = match ? match[1].trim() : '';
+            });
+            return result;
+        }
+
+        function buildAssessmentCard(text) {
+            const d = parseFinalAssessment(text);
+
+            window._lastTests = d['TESTS'];
+            window._pendingTests = false;
+
+            function formatList(val) {
+                if (!val || val.toLowerCase() === 'not needed' || val.toLowerCase() === 'none') {
+                    return '<span style="opacity:0.75;font-style:italic;">None / Not needed</span>';
+                }
+                return val.split(',').map(item => item.trim()).filter(Boolean).map(item =>
+                    `<div style="display:flex;align-items:flex-start;gap:8px;margin:4px 0;">
+                <span style="margin-top:2px;font-size:0.7rem;">●</span>
+                <span>${escapeHtml(item)}</span>
+            </div>`
+                ).join('');
+            }
+
+            function formatTests(val) {
+                if (!val) return '<span style="opacity:0.75;font-style:italic;">None</span>';
+                return val.split(',').map(item => item.trim()).filter(Boolean).map(item => {
+                    const parts = item.split('–');
+                    const name = parts[0].trim();
+                    const reason = parts[1] ? parts[1].trim() : '';
+                    return `<div style="display:flex;align-items:flex-start;gap:8px;margin:4px 0;">
+                <span style="margin-top:2px;font-size:0.7rem;">●</span>
+                <span><strong>${escapeHtml(name)}</strong>${reason ? ' — ' + escapeHtml(reason) : ''}</span>
+            </div>`;
+                }).join('');
+            }
+
+            const note = escapeHtml(d['NOTE'] || 'Please consult a licensed doctor for final confirmation.');
+
+            return `<div class="chat-bubble bubble-doctor" style="max-width:95%;font-family:'Inter',sans-serif;font-size:0.9rem;line-height:1.7;">
+
+        <div style="margin-bottom:12px;">
+            <div style="font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;opacity:0.8;margin-bottom:4px;">Assessment</div>
+            <div style="font-weight:600;">${escapeHtml(d['DIAGNOSIS'] || '—')}</div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+            <div style="font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;opacity:0.8;margin-bottom:4px;">First-line Medicines</div>
+            ${formatList(d['FIRST LINE'])}
+        </div>
+
+        <div style="margin-bottom:12px;">
+            <div style="font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;opacity:0.8;margin-bottom:4px;">Second-line / Alternatives</div>
+            ${formatList(d['SECOND LINE'])}
+        </div>
+
+        <div style="margin-bottom:12px;">
+            <div style="font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;opacity:0.8;margin-bottom:4px;">Avoid</div>
+            ${formatList(d['AVOID'])}
+        </div>
+
+        <div style="margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.15);border-radius:8px;font-size:0.85rem;">
+            <span style="font-weight:700;">Note:</span> ${note}
+        </div>
+
+        <div class="bubble-meta"><i class="bi bi-person-badge-fill"></i> Dr. Safecure</div>
+    </div>`;
+        }
+
+        function appendDoctorBubble(text, isAssessment) {
+            const msgs = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+
+            if (isAssessment) {
+                div.style.cssText = 'width:100%;animation:bubbleIn 0.3s ease-out;';
+                div.innerHTML = buildAssessmentCard(text);
+            } else {
+                div.className = 'chat-bubble bubble-doctor';
+                div.innerHTML = `<div>${escapeHtml(text)}</div>
+                <div class="bubble-meta"><i class="bi bi-person-badge-fill"></i> Dr. Safecure</div>`;
+            }
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function appendUserBubble(text) {
+            const msgs = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'chat-bubble bubble-user';
+            div.innerHTML = `<div>${escapeHtml(text)}</div>
+            <div class="bubble-meta"><i class="bi bi-person-fill"></i> You</div>`;
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const msgs = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'chat-bubble bubble-typing';
+            div.id = 'typingBubble';
+            div.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const t = document.getElementById('typingBubble');
+            if (t) t.remove();
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            document.getElementById('chatMicPreview').style.display = 'none';
+
+            input.value = '';
+            autoResizeChat(input);
+            stopChatAudio();
+            appendUserBubble(msg);
+            chatHistory.push({ role: 'user', content: msg });
+
+            // ── Pending tests check — API call se PEHLE ──
+            if (window._pendingTests === true && /yes|haan|ha|sure|ok|show|bata|chahiye/i.test(msg)) {
+                window._pendingTests = false;
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    const testMsg = buildTestsMessage(window._lastTests);
+                    const msgs = document.getElementById('chatMessages');
+                    const div = document.createElement('div');
+                    div.className = 'chat-bubble bubble-doctor';
+                    div.style.cssText = 'white-space:pre-line;align-self:flex-start;max-width:85%;';
+                    div.innerHTML = `<div>${escapeHtml(testMsg)}</div>
+    <div class="bubble-meta"><i class="bi bi-person-badge-fill"></i> Dr. Safecure</div>`;
+                    msgs.appendChild(div);
+                    msgs.scrollTop = msgs.scrollHeight;
+                    chatHistory.push({ role: 'assistant', content: testMsg });
+
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            const followUp = currentLang === 'hi'
+                                ? 'क्या आपको दवाइयों की dosage जाननी है, या कोई और तकलीफ है?'
+                                : 'Do you have questions about dosage or how to take these medicines? Or is there anything else you would like to discuss?';
+                            appendDoctorBubble(followUp, false);
+                            chatHistory.push({ role: 'assistant', content: followUp });
+                        }, 1000);
+                    }, 500);
+                }, 1200);
+                document.getElementById('chatSendBtn').disabled = false;
+                return;
+            }
+
+            // ── Normal API call ──
+            document.getElementById('chatSendBtn').disabled = true;
+            showTypingIndicator();
+
+            try {
+                const res = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: msg,
+                        history: chatHistory.slice(0, -1),
+                        lang: currentLang
+                    })
+                });
+
+                removeTypingIndicator();
+                if (!res.ok) throw new Error(`Server ${res.status}`);
+                const data = await res.json();
+
+                if (data.status === 'error') {
+                    appendDoctorBubble('Something went wrong. Please try again.', false);
+                } else {
+                    const isAssessment = isFinalAssessment(data.reply);
+                    appendDoctorBubble(data.reply, isAssessment);
+                    chatHistory.push({ role: 'assistant', content: data.reply });
+                    if (data.audio_url) {
+                        setTimeout(() => playChatTTS(data.reply, data.audio_url, !isAssessment), 200);
+                    }
+
+                    if (isAssessment) {
+                        const parsed = parseFinalAssessment(data.reply);
+                        window._lastTests = parsed['TESTS'];
+                        window._pendingTests = false; // reset pehle
+                        setTimeout(() => {
+                            showTypingIndicator();
+                            setTimeout(() => {
+                                removeTypingIndicator();
+                                const testQ = currentLang === 'hi'
+                                    ? 'क्या आप recommended tests भी देखना चाहेंगे? ये tests diagnosis confirm करने में मदद करेंगे।'
+                                    : 'Would you like me to suggest the recommended tests for your condition? These can help confirm the diagnosis.';
+                                appendDoctorBubble(testQ, false);
+                                chatHistory.push({ role: 'assistant', content: testQ });
+                                window._pendingTests = true; // ab true karo, question show hone ke baad
+                            }, 1200);
+                        }, 800);
+                    }
+                }
+            } catch (err) {
+                removeTypingIndicator();
+                appendDoctorBubble('Connection error. Please check your server and try again.', false);
+            } finally {
+                document.getElementById('chatSendBtn').disabled = false;
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function chatKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        }
+
+        function autoResizeChat(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+        }
+
+        // ── Chat TTS ──
+        function playChatTTS(text, prebuiltUrl, autoMicAfter) {
+            stopChatAudio();
+            const bar = document.getElementById('chatAudioBar');
+            bar.classList.add('active');
+            // Avatar: face forward and lip-sync
+            // setAvatarState('speaking');
+            // // Start viseme sequence from response text (if text passed directly)
+            // if (text && AV.speakVisemes) AV.speakVisemes(text);
+
+            function onAudioEnd() {
+                bar.classList.remove('active');
+                chatAudio = null;
+                // Avatar: back to idle
+                // setAvatarState('idle');
+                // Auto-start mic after doctor finishes speaking (only for conversation turns)
+                if (autoMicAfter && SpeechRecognition) {
+                    setTimeout(() => {
+                        if (!chatMicActive) toggleChatMic();
+                    }, 400);
+                }
+            }
+
+            if (prebuiltUrl) {
+                chatAudio = new Audio(prebuiltUrl);
+                chatAudio.onended = onAudioEnd;
+                chatAudio.onerror = () => { bar.classList.remove('active'); chatAudio = null; };
+                chatAudio.play().catch(() => bar.classList.remove('active'));
+                return;
+            }
+
+            fetch('/tts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.audio_url) {
+                        chatAudio = new Audio(d.audio_url);
+                        chatAudio.onended = onAudioEnd;
+                        chatAudio.onerror = () => { bar.classList.remove('active'); chatAudio = null; };
+                        chatAudio.play().catch(() => bar.classList.remove('active'));
+                    } else {
+                        bar.classList.remove('active');
+                    }
+                })
+                .catch(() => bar.classList.remove('active'));
+        }
+
+        function stopChatAudio() {
+            if (chatAudio) {
+                chatAudio.pause(); chatAudio.currentTime = 0; chatAudio = null;
+            }
+            document.getElementById('chatAudioBar').classList.remove('active');
+            // Avatar: back to idle
+            // setAvatarState('idle');
+            // If mic was auto-started after TTS, stop it too so user can type
+            if (chatMicActive && chatRecog) {
+                chatRecog.stop();
+            }
+        }
+
+        // ── Chat Voice Input — with preview/confirm before sending ──
+
+        function toggleChatMic() {
+            if (!SpeechRecognition) { alert('Voice input not supported. Use Chrome or Edge.'); return; }
+
+            if (chatMicActive) {
+                if (chatRecog) chatRecog.stop();
+                chatMicActive = false;
+                document.getElementById('chatMicBtn').classList.remove('listening');
+                document.getElementById('chatMicIcon').className = 'bi bi-mic-fill';
+                return;
+            }
+
+            chatRecog = new SpeechRecognition();
+            chatRecog.lang = t('ttsLang');
+            chatRecog.continuous = false;
+            chatRecog.interimResults = true;
+
+            chatRecog.onstart = () => {
+                chatMicActive = true;
+                chatMicFinalText = '';
+                document.getElementById('chatMicBtn').classList.add('listening');
+                document.getElementById('chatMicIcon').className = 'bi bi-mic-fill';
+                // Hide preview, show status in input
+                document.getElementById('chatMicPreview').style.display = 'none';
+                document.getElementById('chatInput').placeholder = currentLang === 'hi' ? '🎤 सुन रहा है…' : '🎤 Listening…';
+                document.getElementById('chatInput').value = '';
+                // Avatar: tilt ear toward user
+                // setAvatarState('listening');
+            };
+
+            chatRecog.onresult = (e) => {
+                let final = '', interim = '';
+                for (let i = e.resultIndex; i < e.results.length; i++) {
+                    if (e.results[i].isFinal) final += e.results[i][0].transcript;
+                    else interim += e.results[i][0].transcript;
+                }
+                // Show live in textarea (interim), but don't auto-send
+                document.getElementById('chatInput').value = final || interim;
+                autoResizeChat(document.getElementById('chatInput'));
+                if (final) chatMicFinalText = final;
+            };
+
+            chatRecog.onend = () => {
+                chatMicActive = false;
+                document.getElementById('chatMicBtn').classList.remove('listening');
+                document.getElementById('chatMicIcon').className = 'bi bi-mic-fill';
+                document.getElementById('chatInput').placeholder = currentLang === 'hi' ? 'अपना संदेश टाइप करें या माइक दबाएं…' : 'Type your message or tap the mic…';
+
+                const captured = chatMicFinalText || document.getElementById('chatInput').value.trim();
+                if (captured) {
+                    document.getElementById('chatInput').value = captured;
+                    autoResizeChat(document.getElementById('chatInput'));
+                    document.getElementById('chatInput').focus();
+                    // Preview bilkul nahi dikhana — bas textarea mein text set karo
+                }
+            };
+
+            chatRecog.onerror = () => {
+                chatMicActive = false;
+                document.getElementById('chatMicBtn').classList.remove('listening');
+                document.getElementById('chatInput').placeholder = currentLang === 'hi' ? 'अपना संदेश टाइप करें या माइक दबाएं…' : 'Type your message or tap the mic…';
+            };
+
+            chatRecog.start();
+        }
+
+        function confirmMicSend() {
+            document.getElementById('chatMicPreview').style.display = 'none';
+            // Use whatever is now in the textarea (user may have edited it)
+            sendChatMessage();
+        }
+
+        function discardMicInput() {
+            document.getElementById('chatMicPreview').style.display = 'none';
+            document.getElementById('chatInput').value = '';
+            autoResizeChat(document.getElementById('chatInput'));
+            chatMicFinalText = '';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); analyzeCase(); }
+        });
+
+        // // ══════════════════════════════════════════════════════════
+        // // CANVAS AVATAR — Dr. Safecure  (Viseme Lip-Sync Engine)
+        // // ══════════════════════════════════════════════════════════
+        // const AV = (() => {
+        //     const canvas = document.getElementById('doctorCanvas');
+        //     if (!canvas) return {};
+        //     const cx = canvas.getContext('2d');
+        //     const W = 140, H = 140;
+        //     const CX = 70, CY = 70, R = 66;   // face center & radius
+
+        //     // ── Mouth shapes keyed by viseme ──────────────────────
+        //     // Each shape: { w, h, smile, innerH }
+        //     // w=half-width, h=lip-height, smile=corner lift, innerH=opening
+        //     const VISEMES = {
+        //         rest: { w: 14, h: 4, smile: 3, inner: 0 },
+        //         AA: { w: 16, h: 7, smile: 0, inner: 8 },  // "aaa" open
+        //         AE: { w: 15, h: 5, smile: 1, inner: 5 },  // "ae"
+        //         AO: { w: 10, h: 8, smile: -1, inner: 9 },  // "oh" round
+        //         EH: { w: 14, h: 5, smile: 2, inner: 4 },  // "eh"
+        //         ER: { w: 10, h: 5, smile: 0, inner: 4 },  // "er"
+        //         IH: { w: 15, h: 3, smile: 5, inner: 2 },  // "ih" wide smile
+        //         IY: { w: 16, h: 3, smile: 6, inner: 2 },  // "ee" big smile
+        //         OW: { w: 9, h: 9, smile: -2, inner: 10 },  // "ow" round open
+        //         UH: { w: 9, h: 6, smile: -1, inner: 5 },  // "uh"
+        //         UW: { w: 7, h: 8, smile: -3, inner: 7 },  // "oo" tiny round
+        //         BMP: { w: 13, h: 2, smile: 1, inner: 0 },  // b/p/m closed
+        //         FV: { w: 12, h: 3, smile: 1, inner: 1 },  // f/v bite
+        //         TH: { w: 13, h: 3, smile: 2, inner: 2 },  // th tongue
+        //         TD: { w: 12, h: 4, smile: 2, inner: 3 },  // t/d/n
+        //         KG: { w: 12, h: 5, smile: 1, inner: 4 },  // k/g back
+        //         SS: { w: 13, h: 3, smile: 3, inner: 2 },  // s/z teeth
+        //         SH: { w: 11, h: 4, smile: 1, inner: 3 },  // sh/ch
+        //         smile: { w: 14, h: 3, smile: 5, inner: 0 },  // idle smile
+        //     };
+
+        //     // ── Phoneme → viseme map ──────────────────────────────
+        //     const PHONE_MAP = {
+        //         a: ['AA'], ae: ['AE'], ah: ['AA'], ao: ['AO'], aw: ['AO'], ay: ['AE', 'IY'],
+        //         b: ['BMP'], ch: ['SH'], d: ['TD'], dh: ['TH'], eh: ['EH'], er: ['ER'],
+        //         ey: ['EH', 'IY'], f: ['FV'], g: ['KG'], hh: ['AA'], ih: ['IH'], iy: ['IY'],
+        //         jh: ['SH'], k: ['KG'], l: ['TD'], m: ['BMP'], n: ['TD'], ng: ['KG'],
+        //         ow: ['OW'], oy: ['OW', 'IY'], p: ['BMP'], r: ['ER'], s: ['SS'], sh: ['SH'],
+        //         t: ['TD'], th: ['TH'], uh: ['UH'], uw: ['UW'], v: ['FV'], w: ['UW'],
+        //         y: ['IY'], z: ['SS'], zh: ['SH'],
+        //     };
+
+        //     // ── Text → viseme sequence ─────────────────────────────
+        //     function textToVisemes(text) {
+        //         const lower = text.toLowerCase().replace(/[^a-z ]/g, '');
+        //         const seq = [];
+        //         // Simple rule-based phoneme estimation
+        //         const rules = [
+        //             [/oo/g, 'UW'], [/ee|ie|ea|y(?=[aeiou])/g, 'IY'],
+        //             [/ou|ow/g, 'OW'], [/oi|oy/g, 'OW'],
+        //             [/au|aw/g, 'AO'], [/ai|ay/g, 'AE'],
+        //             [/th/g, 'TH'], [/sh|ch/g, 'SH'], [/ng/g, 'KG'],
+        //             [/a/g, 'AA'], [/e/g, 'EH'], [/i/g, 'IH'],
+        //             [/o/g, 'AO'], [/u/g, 'UH'], [/b|p|m/g, 'BMP'],
+        //             [/f|v/g, 'FV'], [/t|d|n|l/g, 'TD'], [/k|g|q/g, 'KG'],
+        //             [/s|z/g, 'SS'], [/r/g, 'ER'], [/w/g, 'UW'],
+        //             [/h/g, 'AA'], [/y/g, 'IY'],
+        //         ];
+        //         // Per-character viseme queue
+        //         let i = 0;
+        //         while (i < lower.length) {
+        //             const ch = lower[i];
+        //             if (ch === ' ') { seq.push('rest'); i++; continue; }
+        //             // Try two-char first
+        //             let matched = false;
+        //             for (const [re, vis] of rules) {
+        //                 const two = lower.slice(i, i + 2);
+        //                 if (new RegExp('^' + re.source.replace(/g$/, '')).test(two)) {
+        //                     seq.push(vis); i += 2; matched = true; break;
+        //                 }
+        //                 const one = lower[i];
+        //                 if (new RegExp('^' + re.source.replace(/g$/, '')).test(one)) {
+        //                     seq.push(vis); i++; matched = true; break;
+        //                 }
+        //             }
+        //             if (!matched) { i++; }
+        //         }
+        //         return seq.length ? seq : ['rest'];
+        //     }
+
+        //     // ── State ─────────────────────────────────────────────
+        //     let currentViseme = 'rest';
+        //     let targetViseme = 'rest';
+        //     let blinkT = 0;
+        //     let blinkOpen = 1;     // 0=closed 1=open
+        //     let blinkTimer = 0;
+        //     let headTiltTarget = 0;
+        //     let headTilt = 0;
+        //     let rafId = null;
+        //     let visemeQueue = [];
+        //     let visemeTimer = null;
+        //     let mouthLerp = { w: 14, h: 4, smile: 3, inner: 0 };
+
+        //     // ── Draw helpers ──────────────────────────────────────
+        //     function lerp(a, b, t) { return a + (b - a) * t; }
+
+        //     function drawFace(tilt, blink, mouth) {
+        //         cx.clearRect(0, 0, W, H);
+        //         cx.save();
+        //         cx.translate(CX, CY);
+        //         cx.rotate(tilt * Math.PI / 180);
+
+        //         // ── Background circle ──
+        //         const bgGrad = cx.createRadialGradient(-10, -10, 10, 0, 0, R);
+        //         bgGrad.addColorStop(0, '#e8f0ff');
+        //         bgGrad.addColorStop(1, '#c8d4f8');
+        //         cx.beginPath();
+        //         cx.arc(0, 0, R, 0, Math.PI * 2);
+        //         cx.fillStyle = bgGrad;
+        //         cx.fill();
+
+        //         // ── Neck ──
+        //         const neckGrad = cx.createLinearGradient(-8, 22, 8, 38);
+        //         neckGrad.addColorStop(0, '#f5c07a'); neckGrad.addColorStop(1, '#e8a55a');
+        //         cx.beginPath();
+        //         cx.ellipse(0, 42, 11, 12, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = neckGrad; cx.fill();
+
+        //         // ── White coat collar ──
+        //         cx.beginPath();
+        //         cx.moveTo(-32, 55); cx.quadraticCurveTo(-18, 40, -5, 46);
+        //         cx.quadraticCurveTo(0, 48, 5, 46);
+        //         cx.quadraticCurveTo(18, 40, 32, 55);
+        //         cx.lineTo(32, 66); cx.lineTo(-32, 66); cx.closePath();
+        //         cx.fillStyle = '#f4f6ff'; cx.fill();
+        //         cx.strokeStyle = '#d0d8f8'; cx.lineWidth = 0.8; cx.stroke();
+
+        //         // Shirt under coat (blue/purple)
+        //         const shirtGrad = cx.createLinearGradient(-10, 50, 10, 66);
+        //         shirtGrad.addColorStop(0, '#7b8fea'); shirtGrad.addColorStop(1, '#654baa');
+        //         cx.beginPath();
+        //         cx.moveTo(-8, 48); cx.quadraticCurveTo(0, 54, 8, 48);
+        //         cx.lineTo(10, 66); cx.lineTo(-10, 66); cx.closePath();
+        //         cx.fillStyle = shirtGrad; cx.fill();
+
+        //         // Stethoscope
+        //         cx.beginPath();
+        //         cx.arc(-14, 56, 6, 0.5, Math.PI * 1.8, false);
+        //         cx.strokeStyle = '#8898cc'; cx.lineWidth = 2; cx.stroke();
+        //         cx.beginPath(); cx.arc(-19, 54, 3, 0, Math.PI * 2);
+        //         cx.fillStyle = '#6678bb'; cx.fill();
+        //         cx.beginPath(); cx.arc(-19, 54, 2, 0, Math.PI * 2);
+        //         cx.fillStyle = '#8898dd'; cx.fill();
+
+        //         // ── HEAD ──
+        //         const skinGrad = cx.createRadialGradient(-8, -22, 4, 0, -10, 34);
+        //         skinGrad.addColorStop(0, '#fde2b8');
+        //         skinGrad.addColorStop(0.5, '#f8c888');
+        //         skinGrad.addColorStop(1, '#e8a55a');
+        //         cx.beginPath();
+        //         cx.ellipse(0, -10, 28, 33, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = skinGrad;
+        //         cx.shadowColor = 'rgba(0,0,0,0.12)'; cx.shadowBlur = 8; cx.shadowOffsetY = 3;
+        //         cx.fill();
+        //         cx.shadowColor = 'transparent';
+
+        //         // ── EARS ──
+        //         // Left ear
+        //         cx.beginPath();
+        //         cx.ellipse(-29, -9, 5, 7, 0.2, 0, Math.PI * 2);
+        //         cx.fillStyle = '#f0b870'; cx.fill();
+        //         cx.beginPath();
+        //         cx.ellipse(-29, -9, 2.5, 4, 0.2, 0, Math.PI * 2);
+        //         cx.fillStyle = '#d89050'; cx.fill();
+        //         // Right ear
+        //         cx.beginPath();
+        //         cx.ellipse(29, -9, 5, 7, -0.2, 0, Math.PI * 2);
+        //         cx.fillStyle = '#f0b870'; cx.fill();
+        //         cx.beginPath();
+        //         cx.ellipse(29, -9, 2.5, 4, -0.2, 0, Math.PI * 2);
+        //         cx.fillStyle = '#d89050'; cx.fill();
+
+        //         // ── HAIR ──
+        //         // Main hair — short, professional, dark brown
+        //         const hairGrad = cx.createLinearGradient(0, -44, 0, -20);
+        //         hairGrad.addColorStop(0, '#1a0f08'); hairGrad.addColorStop(1, '#2d1a0d');
+        //         cx.beginPath();
+        //         cx.ellipse(0, -10, 28, 33, 0, 0, Math.PI * 2);
+        //         cx.save();
+        //         cx.clip();
+        //         cx.fillStyle = hairGrad;
+        //         cx.fillRect(-30, -44, 60, 28);
+        //         // Side parts
+        //         cx.beginPath();
+        //         cx.moveTo(-28, -12); cx.quadraticCurveTo(-30, -5, -28, 4);
+        //         cx.lineTo(-24, 4); cx.quadraticCurveTo(-26, -5, -24, -12); cx.closePath();
+        //         cx.fillStyle = '#1a0f08'; cx.fill();
+        //         cx.beginPath();
+        //         cx.moveTo(28, -12); cx.quadraticCurveTo(30, -5, 28, 4);
+        //         cx.lineTo(24, 4); cx.quadraticCurveTo(26, -5, 24, -12); cx.closePath();
+        //         cx.fillStyle = '#1a0f08'; cx.fill();
+        //         cx.restore();
+        //         // Hair highlight streak
+        //         cx.beginPath();
+        //         cx.moveTo(-12, -42); cx.quadraticCurveTo(0, -44, 12, -42);
+        //         cx.strokeStyle = 'rgba(80,50,20,0.4)'; cx.lineWidth = 4; cx.stroke();
+
+        //         // ── FOREHEAD SHADOW ──
+        //         const foreGrad = cx.createRadialGradient(0, -26, 2, 0, -22, 18);
+        //         foreGrad.addColorStop(0, 'rgba(200,120,50,0)');
+        //         foreGrad.addColorStop(1, 'rgba(200,120,50,0.1)');
+        //         cx.beginPath(); cx.ellipse(0, -22, 18, 8, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = foreGrad; cx.fill();
+
+        //         // ── EYEBROWS ──
+        //         cx.lineWidth = 2.8; cx.lineCap = 'round';
+        //         cx.beginPath();
+        //         cx.moveTo(-18, -25); cx.quadraticCurveTo(-13, -29, -7, -26);
+        //         cx.strokeStyle = '#1a0f08'; cx.stroke();
+        //         cx.beginPath();
+        //         cx.moveTo(7, -26); cx.quadraticCurveTo(13, -29, 18, -25);
+        //         cx.strokeStyle = '#1a0f08'; cx.stroke();
+
+        //         // ── EYES ──
+        //         const eyeY = -16;
+        //         [-13, 13].forEach((ex, idx) => {
+        //             // Eye socket shadow
+        //             const sockGrad = cx.createRadialGradient(ex, eyeY, 0, ex, eyeY, 9);
+        //             sockGrad.addColorStop(0, 'rgba(200,120,60,0.08)');
+        //             sockGrad.addColorStop(1, 'rgba(200,120,60,0)');
+        //             cx.beginPath(); cx.ellipse(ex, eyeY, 9, 7, 0, 0, Math.PI * 2);
+        //             cx.fillStyle = sockGrad; cx.fill();
+
+        //             // Whites
+        //             cx.beginPath(); cx.ellipse(ex, eyeY, 7.5, 5.5, 0, 0, Math.PI * 2);
+        //             cx.fillStyle = 'white'; cx.fill();
+        //             cx.strokeStyle = 'rgba(180,160,140,0.3)'; cx.lineWidth = 0.5; cx.stroke();
+
+        //             // Iris
+        //             const irisGrad = cx.createRadialGradient(ex - 1, eyeY - 1, 0, ex, eyeY, 5);
+        //             irisGrad.addColorStop(0, '#6a9fd8'); irisGrad.addColorStop(0.5, '#3468a0'); irisGrad.addColorStop(1, '#1a3f6a');
+        //             cx.beginPath(); cx.arc(ex, eyeY, 4.5, 0, Math.PI * 2);
+        //             cx.fillStyle = irisGrad; cx.fill();
+        //             // Iris ring
+        //             cx.beginPath(); cx.arc(ex, eyeY, 4.5, 0, Math.PI * 2);
+        //             cx.strokeStyle = 'rgba(20,50,100,0.4)'; cx.lineWidth = 0.6; cx.stroke();
+        //             // Iris texture lines
+        //             for (let l = 0; l < 6; l++) {
+        //                 const a = l * Math.PI / 3;
+        //                 cx.beginPath();
+        //                 cx.moveTo(ex + 1.5 * Math.cos(a), eyeY + 1.5 * Math.sin(a));
+        //                 cx.lineTo(ex + 4 * Math.cos(a), eyeY + 4 * Math.sin(a));
+        //                 cx.strokeStyle = 'rgba(20,60,120,0.25)'; cx.lineWidth = 0.5; cx.stroke();
+        //             }
+
+        //             // Pupil
+        //             cx.beginPath(); cx.arc(ex, eyeY, 2.4, 0, Math.PI * 2);
+        //             cx.fillStyle = '#0a0a0a'; cx.fill();
+        //             // Catchlight main
+        //             cx.beginPath(); cx.arc(ex + 1.2, eyeY - 1.2, 1.2, 0, Math.PI * 2);
+        //             cx.fillStyle = 'rgba(255,255,255,0.92)'; cx.fill();
+        //             // Catchlight small
+        //             cx.beginPath(); cx.arc(ex - 1, eyeY + 1, 0.6, 0, Math.PI * 2);
+        //             cx.fillStyle = 'rgba(255,255,255,0.5)'; cx.fill();
+
+        //             // Eyelid (blink)
+        //             if (blink < 1) {
+        //                 cx.beginPath();
+        //                 cx.ellipse(ex, eyeY - 5.5 * (1 - blink), 7.5, 5.5 * (1 - blink) + 0.5, 0, 0, Math.PI);
+        //                 cx.fillStyle = '#f5c07a'; cx.fill();
+        //                 // Lash line
+        //                 cx.beginPath();
+        //                 cx.ellipse(ex, eyeY - 5.5 * (1 - blink), 7.5, 5.5 * (1 - blink) + 0.5, 0, Math.PI, 0, true);
+        //                 cx.strokeStyle = '#0a0a0a'; cx.lineWidth = 1.5; cx.stroke();
+        //             }
+
+        //             // Upper eyelash line
+        //             cx.beginPath();
+        //             cx.ellipse(ex, eyeY, 7.5, 5.5, 0, Math.PI, 0, true);
+        //             cx.strokeStyle = 'rgba(10,5,0,0.85)'; cx.lineWidth = 1.6; cx.stroke();
+        //             // Lower lash (subtle)
+        //             cx.beginPath();
+        //             cx.ellipse(ex, eyeY, 7.5, 5.5, 0, 0, Math.PI, false);
+        //             cx.strokeStyle = 'rgba(10,5,0,0.2)'; cx.lineWidth = 0.7; cx.stroke();
+        //         });
+
+        //         // ── NOSE ──
+        //         cx.beginPath();
+        //         cx.moveTo(0, -8); cx.quadraticCurveTo(-4, 2, -6, 5);
+        //         cx.quadraticCurveTo(-4, 8, 0, 8); cx.quadraticCurveTo(4, 8, 6, 5);
+        //         cx.quadraticCurveTo(4, 2, 0, -8);
+        //         cx.strokeStyle = 'rgba(190,120,60,0.55)'; cx.lineWidth = 1.2;
+        //         cx.lineJoin = 'round'; cx.stroke();
+        //         // Nose tip
+        //         const noseTip = cx.createRadialGradient(0, 7, 0, 0, 7, 6);
+        //         noseTip.addColorStop(0, 'rgba(220,140,80,0.3)'); noseTip.addColorStop(1, 'transparent');
+        //         cx.beginPath(); cx.ellipse(0, 7, 6, 3.5, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = noseTip; cx.fill();
+        //         // Nostrils
+        //         cx.beginPath(); cx.ellipse(-5.5, 6, 2, 1.2, -0.3, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(160,90,40,0.35)'; cx.fill();
+        //         cx.beginPath(); cx.ellipse(5.5, 6, 2, 1.2, 0.3, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(160,90,40,0.35)'; cx.fill();
+
+        //         // ── PHILTRUM ──
+        //         cx.beginPath();
+        //         cx.moveTo(-3, 10); cx.quadraticCurveTo(0, 8, 3, 10);
+        //         cx.strokeStyle = 'rgba(190,110,55,0.3)'; cx.lineWidth = 0.8; cx.stroke();
+
+        //         // ── MOUTH  (viseme-driven) ──
+        //         drawMouth(mouth);
+
+        //         // ── FACE SHADING ──
+        //         // Cheek blush
+        //         const blush = cx.createRadialGradient(-22, 2, 0, -22, 2, 10);
+        //         blush.addColorStop(0, 'rgba(240,140,120,0.18)'); blush.addColorStop(1, 'transparent');
+        //         cx.beginPath(); cx.ellipse(-22, 2, 10, 7, 0, 0, Math.PI * 2); cx.fillStyle = blush; cx.fill();
+        //         const blush2 = cx.createRadialGradient(22, 2, 0, 22, 2, 10);
+        //         blush2.addColorStop(0, 'rgba(240,140,120,0.18)'); blush2.addColorStop(1, 'transparent');
+        //         cx.beginPath(); cx.ellipse(22, 2, 10, 7, 0, 0, Math.PI * 2); cx.fillStyle = blush2; cx.fill();
+        //         // Jaw shading
+        //         cx.beginPath(); cx.ellipse(0, 28, 14, 5, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(200,120,60,0.12)'; cx.fill();
+        //         // Face rim light
+        //         cx.beginPath(); cx.ellipse(0, -10, 28, 33, 0, 0, Math.PI * 2);
+        //         cx.strokeStyle = 'rgba(255,240,200,0.25)'; cx.lineWidth = 2; cx.stroke();
+
+        //         cx.restore();
+        //     }
+
+        //     function drawMouth(m) {
+        //         const { w, h, smile, inner } = m;
+        //         const mx = 0, my = 17;
+
+        //         // Mouth shadow
+        //         cx.beginPath();
+        //         cx.ellipse(mx, my + 1, w + 2, h / 2 + 2, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(150,70,40,0.12)'; cx.fill();
+
+        //         // Inner mouth (opening)
+        //         if (inner > 0.5) {
+        //             cx.beginPath();
+        //             cx.ellipse(mx, my + inner * 0.2, w - 2, inner * 0.6, 0, 0, Math.PI * 2);
+        //             cx.fillStyle = '#3a0a05'; cx.fill();
+        //             // Teeth visible for wide open
+        //             if (inner > 4) {
+        //                 cx.beginPath();
+        //                 cx.ellipse(mx, my - inner * 0.1, w - 4, inner * 0.22, 0, 0, Math.PI);
+        //                 cx.fillStyle = 'rgba(255,252,248,0.9)'; cx.fill();
+        //                 cx.beginPath();
+        //                 cx.ellipse(mx, my + inner * 0.5, w - 4, inner * 0.2, 0, Math.PI, Math.PI * 2);
+        //                 cx.fillStyle = 'rgba(255,252,248,0.7)'; cx.fill();
+        //                 // Tongue hint
+        //                 if (inner > 7) {
+        //                     cx.beginPath();
+        //                     cx.ellipse(mx, my + inner * 0.4, w - 6, inner * 0.18, 0, 0, Math.PI * 2);
+        //                     cx.fillStyle = 'rgba(210,100,80,0.6)'; cx.fill();
+        //                 }
+        //             }
+        //         }
+
+        //         // Upper lip
+        //         cx.beginPath();
+        //         cx.moveTo(mx - w, my + smile);
+        //         cx.quadraticCurveTo(mx - w * 0.4, my - h - smile * 0.3, mx - w * 0.15, my - h * 0.4);
+        //         cx.quadraticCurveTo(mx, my - h * 0.9, mx + w * 0.15, my - h * 0.4);
+        //         cx.quadraticCurveTo(mx + w * 0.4, my - h - smile * 0.3, mx + w, my + smile);
+        //         cx.quadraticCurveTo(mx + w * 0.4, my + h * 0.2, mx, my + h * 0.3);
+        //         cx.quadraticCurveTo(mx - w * 0.4, my + h * 0.2, mx - w, my + smile);
+        //         cx.closePath();
+        //         const lipGrad = cx.createLinearGradient(mx, my - h, mx, my + h);
+        //         lipGrad.addColorStop(0, '#cc6655'); lipGrad.addColorStop(0.4, '#e07060'); lipGrad.addColorStop(1, '#d06050');
+        //         cx.fillStyle = lipGrad; cx.fill();
+
+        //         // Lower lip
+        //         cx.beginPath();
+        //         cx.moveTo(mx - w, my + smile);
+        //         cx.quadraticCurveTo(mx - w * 0.5, my + h * 2 + smile * 0.5, mx, my + h * 2.2 + smile * 0.2);
+        //         cx.quadraticCurveTo(mx + w * 0.5, my + h * 2 + smile * 0.5, mx + w, my + smile);
+        //         cx.quadraticCurveTo(mx + w * 0.4, my + h * 0.8, mx, my + h);
+        //         cx.quadraticCurveTo(mx - w * 0.4, my + h * 0.8, mx - w, my + smile);
+        //         cx.closePath();
+        //         const lowerGrad = cx.createLinearGradient(mx, my + smile, mx, my + h * 2.2);
+        //         lowerGrad.addColorStop(0, '#d97060'); lowerGrad.addColorStop(0.5, '#ec8878'); lowerGrad.addColorStop(1, '#d06050');
+        //         cx.fillStyle = lowerGrad; cx.fill();
+        //         // Lower lip highlight
+        //         cx.beginPath();
+        //         cx.ellipse(mx, my + h * 1.6 + smile * 0.3, w * 0.45, h * 0.35, 0, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(255,255,255,0.2)'; cx.fill();
+
+        //         // Lip line (upper cupid bow)
+        //         cx.beginPath();
+        //         cx.moveTo(mx - w, my + smile);
+        //         cx.quadraticCurveTo(mx - w * 0.4, my - h - smile * 0.3, mx - w * 0.15, my - h * 0.4);
+        //         cx.quadraticCurveTo(mx, my - h * 0.9, mx + w * 0.15, my - h * 0.4);
+        //         cx.quadraticCurveTo(mx + w * 0.4, my - h - smile * 0.3, mx + w, my + smile);
+        //         cx.strokeStyle = 'rgba(180,60,40,0.5)'; cx.lineWidth = 0.8; cx.stroke();
+        //         // Mouth corners
+        //         cx.beginPath(); cx.arc(mx - w, my + smile, 1.5, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(160,50,35,0.5)'; cx.fill();
+        //         cx.beginPath(); cx.arc(mx + w, my + smile, 1.5, 0, Math.PI * 2);
+        //         cx.fillStyle = 'rgba(160,50,35,0.5)'; cx.fill();
+        //     }
+
+        //     // ── Animation loop ─────────────────────────────────────
+        //     let lastT = 0;
+        //     function loop(t) {
+        //         const dt = Math.min((t - lastT) / 1000, 0.05);
+        //         lastT = t;
+
+        //         // Blink logic
+        //         blinkTimer += dt;
+        //         if (blinkTimer > 3.5 + Math.random() * 2) {
+        //             blinkTimer = 0; blinkOpen = 0;
+        //         }
+        //         if (blinkOpen < 1) {
+        //             blinkOpen = Math.min(1, blinkOpen + dt * 12);
+        //         }
+
+        //         // Smooth head tilt
+        //         headTilt += (headTiltTarget - headTilt) * Math.min(dt * 6, 1);
+
+        //         // Smooth viseme lerp
+        //         const tv = VISEMES[currentViseme] || VISEMES.rest;
+        //         const speed = dt * 18;
+        //         mouthLerp.w += (tv.w - mouthLerp.w) * speed;
+        //         mouthLerp.h += (tv.h - mouthLerp.h) * speed;
+        //         mouthLerp.smile += (tv.smile - mouthLerp.smile) * speed;
+        //         mouthLerp.inner += (tv.inner - mouthLerp.inner) * speed;
+
+        //         drawFace(headTilt, blinkOpen, mouthLerp);
+        //         rafId = requestAnimationFrame(loop);
+        //     }
+
+        //     // ── Viseme playback from text ──────────────────────────
+        //     function speakVisemes(text) {
+        //         if (visemeTimer) clearInterval(visemeTimer);
+        //         const seq = textToVisemes(text);
+        //         // Add rest frames between words
+        //         const full = [];
+        //         seq.forEach(v => { full.push(v); if (v === 'rest') full.push('rest'); });
+        //         full.push('rest');
+        //         let i = 0;
+        //         // ~90ms per viseme (natural speech pace)
+        //         visemeTimer = setInterval(() => {
+        //             if (i >= full.length) {
+        //                 clearInterval(visemeTimer); visemeTimer = null;
+        //                 currentViseme = 'rest'; return;
+        //             }
+        //             currentViseme = full[i++];
+        //         }, 88);
+        //     }
+
+        //     function stopVisemes() {
+        //         if (visemeTimer) { clearInterval(visemeTimer); visemeTimer = null; }
+        //         currentViseme = 'rest';
+        //     }
+
+        //     // Start render loop
+        //     requestAnimationFrame(t => { lastT = t; rafId = requestAnimationFrame(loop); });
+
+        //     return {
+        //         speakVisemes, stopVisemes,
+        //         setTilt: (deg) => { headTiltTarget = deg; },
+        //         getCanvas: () => canvas
+        //     };
+        // })();
+
+        // ══════════════════════════════════════════
+        // AVATAR STATE CONTROLLER
+        // ══════════════════════════════════════════
+        function setAvatarState(state) {
+            // Avatar elements nahi hain toh silently return karo
+            const canvas = document.getElementById('doctorCanvas');
+            if (!canvas) return;
+            // ... baaki code nahi chalega kyunki return ho gaya
+        }
+
+        // Voice input initialized above
+    </script>
+
+</body>
+
+</html>

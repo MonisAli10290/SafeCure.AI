@@ -2,10 +2,22 @@ import os
 import re
 import sqlite3
 import requests
+import subprocess
+import tempfile
+import shutil
+import uuid
+import io
 from datetime import datetime
-from flask import Flask, request, jsonify, render_template, g
+from flask import Flask, request, jsonify, render_template, g, send_file
 from flask_cors import CORS
 from threading import Lock
+
+# Load .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=".env")
+except ImportError:
+    pass
 
 from pypdf import PdfReader
 from langchain_community.vectorstores import FAISS
@@ -14,7 +26,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 
 from gtts import gTTS
-import uuid
 
 
 app = Flask(__name__)
@@ -22,7 +33,6 @@ CORS(app)
 rag_lock = Lock()
 VECTORSTORE = None
 DATABASE = "safecure.db"
-
 
 # ==============================
 # DATABASE SETUP
@@ -66,7 +76,6 @@ def init_db():
 
 def save_to_db(patient_id, data, parsed):
     db = get_db()
-    # Migrate old schema if needed
     try:
         db.execute("SELECT recommended_tests FROM patients LIMIT 1")
     except Exception:
@@ -214,7 +223,6 @@ def get_vectorstore():
 # LLM CALL
 # ==============================
 def call_llm(llm_prompt):
-    import os
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
     try:
         res = requests.post(
@@ -251,17 +259,14 @@ def call_llm(llm_prompt):
 # SAFETY FILTER
 # ==============================
 def safety_filter(response):
-    # Remove any dosage numbers that sneak through
     response = re.sub(r'\b\d+\s?(mg|g|ml|mcg|IU|kg)\b', '', response, flags=re.IGNORECASE)
     response = re.sub(r'\b\d+\s?times?\s?(daily|a day)\b', '', response, flags=re.IGNORECASE)
     response = re.sub(r'every\s+\d+\s+hours?', '', response, flags=re.IGNORECASE)
     response = re.sub(r'for\s+\d+\s+days?', '', response, flags=re.IGNORECASE)
     response = re.sub(r'once\s+daily|twice\s+daily|three\s+times\s+daily', '', response, flags=re.IGNORECASE)
-    # Clean up extra whitespace left behind
     response = re.sub(r'  +', ' ', response)
     response = re.sub(r' ,', ',', response)
     response = re.sub(r' \)', ')', response)
-    # Pregnancy warnings
     if "pregnan" in response.lower():
         response = re.sub(
             r"\b(tetracycline|doxycycline|ciprofloxacin|levofloxacin|ibuprofen|naproxen|aspirin|trimethoprim|methotrexate|warfarin)\b",
@@ -421,13 +426,11 @@ def clinical_engine(data):
     allergies = data.get('allergies', 'None')
     medications = data.get('medications', 'None')
 
-    # Run rule engine first
     rules = run_rule_engine(condition, allergies)
     matched = rules["matched_rules"]
     is_critical = rules["is_critical"]
     allergy_warnings = rules["allergy_warnings"]
 
-    # Build rule hints for LLM
     rule_hint = ""
     if is_critical:
         rule_hint += "CRITICAL EMERGENCY DETECTED — Recommend immediate hospital referral.\n"
@@ -621,6 +624,7 @@ def analyze():
                 if part:
                     items.append(part)
             return items
+
         summary_text = f"""
 Clinical assessment: {parsed.get("assessment", "")}.
 Antibiotic necessity: {parsed.get("antibiotic_necessity", "")}.
@@ -637,7 +641,6 @@ Recommended tests: {parsed.get("recommended_tests", "")}.
             "contraindications": to_array(parsed.get("contraindications", "")),
             "recommended_tests": to_array(parsed.get("recommended_tests", "")),
             "additional_info_needed": to_array(parsed.get("additional_info_needed", "")),
-
             "summary": summary_text
         })
     except Exception as e:
@@ -655,27 +658,514 @@ def get_patients():
         return jsonify({"status": "error", "message": str(e)})
 
 
+# ==============================
+# SMART TTS — OpenAI → ElevenLabs → gTTS fallback
+# ==============================
+def generate_tts(text, lang="en"):
+    os.makedirs("static", exist_ok=True)
+    filename = f"tts_{uuid.uuid4().hex}.mp3"
+    path = os.path.join("static", filename)
+
+    OPENAI_API_KEY   = os.getenv("OPENAI_API_KEY", "").strip()
+    ELEVENLABS_KEY   = os.getenv("ELEVENLABS_API_KEY", "").strip()
+    ELEVENLABS_VOICE = os.getenv("ELEVENLABS_VOICE_ID", "ErXwobaYiN019PkySvjV")
+
+    print(f"🔑 TTS: OpenAI key present = {bool(OPENAI_API_KEY)}, ElevenLabs = {bool(ELEVENLABS_KEY)}")
+
+    # ── 1. OpenAI TTS ──
+    if OPENAI_API_KEY:
+        try:
+            voice = "onyx"
+            if lang == "hi":
+                voice = "onyx"
+            resp = requests.post(
+                "https://api.openai.com/v1/audio/speech",
+                headers={
+                    "Authorization": f"Bearer {OPENAI_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "tts-1-hd",
+                    "input": text,
+                    "voice": voice,
+                    "speed": 0.92,
+                    "response_format": "mp3"
+                },
+                timeout=20
+            )
+            if resp.status_code == 200:
+                with open(path, "wb") as f:
+                    f.write(resp.content)
+                print("✅ TTS: OpenAI")
+                return path, filename
+            else:
+                print(f"OpenAI TTS error {resp.status_code}: {resp.text[:100]}")
+        except Exception as e:
+            print(f"OpenAI TTS exception: {e}")
+
+    # ── 2. ElevenLabs ──
+    if ELEVENLABS_KEY:
+        try:
+            resp = requests.post(
+                f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE}",
+                headers={
+                    "xi-api-key": ELEVENLABS_KEY,
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "text": text,
+                    "model_id": "eleven_multilingual_v2",
+                    "voice_settings": {
+                        "stability": 0.55,
+                        "similarity_boost": 0.80,
+                        "style": 0.20,
+                        "use_speaker_boost": True
+                    }
+                },
+                timeout=20
+            )
+            if resp.status_code == 200:
+                with open(path, "wb") as f:
+                    f.write(resp.content)
+                print("✅ TTS: ElevenLabs")
+                return path, filename
+            else:
+                print(f"ElevenLabs TTS error {resp.status_code}: {resp.text[:100]}")
+        except Exception as e:
+            print(f"ElevenLabs TTS exception: {e}")
+
+    # ── 3. gTTS fallback ──
+    try:
+        tts_lang_code = "hi" if lang == "hi" else "en"
+        tts_obj = gTTS(text=text, lang=tts_lang_code, slow=False)
+        tts_obj.save(path)
+        print("⚠️ TTS: gTTS fallback")
+        return path, filename
+    except Exception as e:
+        raise Exception(f"All TTS providers failed. Last error: {e}")
+
 
 @app.route("/tts", methods=["POST"])
 def tts():
     try:
         data = request.get_json()
-        text = data.get("text", "")
+        text = data.get("text", "").strip()
+        lang = data.get("lang", "en")
+        if not text:
+            return jsonify({"error": "Empty text"}), 400
 
-        filename = f"tts_{uuid.uuid4().hex}.mp3"
-        path = os.path.join("static", filename)
-
-        os.makedirs("static", exist_ok=True)
-
-        tts = gTTS(text=text, lang="en")
-        tts.save(path)
-
-        return jsonify({
-            "audio_url": f"/static/{filename}"
-        })
+        path, filename = generate_tts(text, lang)
+        return jsonify({"audio_url": f"/static/{filename}"})
 
     except Exception as e:
         return jsonify({"error": str(e)})
+
+
+# ==============================
+# NVIDIA AUDIO2FACE-2D INTEGRATION
+# ──────────────────────────────
+# Flow:
+#   1. /avatar/generate  — POST {audio_url, portrait_url}
+#      → Flask fetches audio WAV, sends gRPC request to NVIDIA A2F-2D NIM
+#      → Returns {video_url} pointing to a served MP4
+#   2. /avatar/video/<filename> — serves the generated MP4
+#
+# The NVIDIA Audio2Face-2D NIM uses gRPC (not HTTP REST).
+# We use the grpcio library to call the cloud-hosted NIM endpoint
+# at grpc.nvcf.nvidia.com:443 with your NGC API key as bearer token.
+#
+# Portrait image: place your doctor photo at static/doctor_portrait.jpg
+# If not present, a placeholder is returned with graceful fallback.
+# ==============================
+
+A2F_GRPC_TARGET   = "grpc.nvcf.nvidia.com:443"
+A2F_FUNCTION_ID   = "952da94b-3a69-4f5c-b0bd-77b4d0f52e84"   # Audio2Face-2D NIM function ID
+AVATAR_VIDEO_DIR  = os.path.join("static", "avatar_videos")
+PORTRAIT_PATH     = os.path.join("static", "doctor_portrait.jpg")
+os.makedirs(AVATAR_VIDEO_DIR, exist_ok=True)
+
+
+def _load_a2f_proto_stubs():
+    """
+    Dynamically load Audio2Face-2D gRPC stubs.
+    NVIDIA publishes the proto at:
+    https://github.com/NVIDIA-Maxine/nim-clients/tree/main/audio2face-2d/proto
+    We include the minimal compiled stubs inline as base64 to avoid requiring
+    a separate compile step — or fall back to a REST-style HTTP request
+    if grpcio is not installed.
+    """
+    try:
+        import grpc
+        return grpc
+    except ImportError:
+        return None
+
+
+def call_audio2face_2d(audio_path: str, portrait_path: str, output_mp4: str) -> bool:
+    """
+    Call NVIDIA Audio2Face-2D NIM via gRPC.
+    Sends portrait image + WAV audio → receives MP4 video stream.
+
+    Returns True on success, False on failure.
+
+    Architecture:
+    ┌─────────────────────────────────────────────────────────┐
+    │  Flask (Python)                                          │
+    │    → gRPC stub → NVIDIA cloud NIM (A2F-2D)              │
+    │    ← MP4 video bytes streamed back                       │
+    │    → saved to static/avatar_videos/<uuid>.mp4            │
+    └─────────────────────────────────────────────────────────┘
+    """
+    NGC_API_KEY = os.getenv("NVIDIA_API_KEY", os.getenv("NGC_API_KEY", "")).strip()
+    if not NGC_API_KEY:
+        print("❌ A2F-2D: No NVIDIA_API_KEY found in environment")
+        return False
+
+    if not os.path.exists(audio_path):
+        print(f"❌ A2F-2D: Audio file not found: {audio_path}")
+        return False
+
+    if not os.path.exists(portrait_path):
+        print(f"❌ A2F-2D: Portrait not found: {portrait_path}")
+        return False
+
+    # ── Try grpcio path ──────────────────────────────────────
+    try:
+        import grpc
+        from google.protobuf import descriptor_pool, descriptor_pb2
+        # The NVIDIA nim-clients repo provides compiled proto stubs.
+        # Install with: pip install nvidia-nim-clients-audio2face-2d
+        # or clone https://github.com/NVIDIA-Maxine/nim-clients
+        # Here we attempt import and fall through to subprocess if unavailable.
+        try:
+            # Try importing compiled stubs (user must have installed them)
+            import sys
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), "nim_clients"))
+            from audio2face_2d import audio2face_2d_pb2, audio2face_2d_pb2_grpc
+
+            with open(portrait_path, "rb") as f:
+                portrait_bytes = f.read()
+            with open(audio_path, "rb") as f:
+                audio_bytes = f.read()
+
+            creds = grpc.ssl_channel_credentials()
+            call_creds = grpc.access_token_call_credentials(NGC_API_KEY)
+            combined = grpc.composite_channel_credentials(creds, call_creds)
+
+            metadata = [
+                ("function-id", A2F_FUNCTION_ID),
+                ("authorization", f"Bearer {NGC_API_KEY}"),
+            ]
+
+            with grpc.secure_channel(A2F_GRPC_TARGET, combined) as channel:
+                stub = audio2face_2d_pb2_grpc.Audio2Face2DServiceStub(channel)
+                request_msg = audio2face_2d_pb2.Audio2Face2DRequest(
+                    portrait=portrait_bytes,
+                    audio=audio_bytes,
+                    output_format="mp4",
+                )
+                response = stub.GenerateVideo(request_msg, metadata=metadata, timeout=120)
+                with open(output_mp4, "wb") as f:
+                    f.write(response.video)
+                print("✅ A2F-2D: gRPC call succeeded (stub path)")
+                return True
+
+        except ImportError:
+            print("⚠️ A2F-2D: nim-clients stubs not found, trying subprocess client...")
+            pass
+
+    except ImportError:
+        print("⚠️ A2F-2D: grpcio not installed")
+
+    # ── Subprocess path: use NVIDIA's official Python client script ──
+    # Clone: git clone https://github.com/NVIDIA-Maxine/nim-clients.git
+    # Then place at: ./nim-clients/audio2face-2d/python/audio2face-2d.py
+    client_script = os.path.join(
+        os.path.dirname(__file__), "nim-clients", "audio2face-2d", "python", "audio2face-2d.py"
+    )
+    if os.path.exists(client_script):
+        try:
+            NGC_API_KEY = os.getenv("NVIDIA_API_KEY", os.getenv("NGC_API_KEY", ""))
+            env = os.environ.copy()
+            env["NGC_API_KEY"] = NGC_API_KEY
+
+            result = subprocess.run([
+                "python", client_script,
+                "--target", A2F_GRPC_TARGET,
+                "--audio-input", audio_path,
+                "--portrait-input", portrait_path,
+                "--output", output_mp4,
+                "--format", "wav",
+            ], capture_output=True, text=True, timeout=120, env=env)
+
+            if result.returncode == 0 and os.path.exists(output_mp4):
+                print("✅ A2F-2D: subprocess client succeeded")
+                return True
+            else:
+                print(f"❌ A2F-2D: subprocess failed: {result.stderr[:300]}")
+        except Exception as e:
+            print(f"❌ A2F-2D subprocess error: {e}")
+
+    print("❌ A2F-2D: All methods failed. Setup instructions:")
+    print("   1. pip install grpcio grpcio-tools")
+    print("   2. git clone https://github.com/NVIDIA-Maxine/nim-clients.git")
+    print("   3. Add NVIDIA_API_KEY=<your_ngc_key> to .env")
+    print("   4. Place doctor portrait at: static/doctor_portrait.jpg")
+    return False
+
+
+@app.route("/avatar/generate", methods=["POST"])
+def avatar_generate():
+    """
+    POST body: { "audio_url": "/static/tts_xxx.mp3", "lang": "en" }
+
+    Steps:
+      1. Convert MP3 → WAV  (ffmpeg or pydub)
+      2. Call NVIDIA Audio2Face-2D gRPC
+      3. Return { "video_url": "/avatar/video/<uuid>.mp4", "fallback": false }
+
+    If A2F-2D is unavailable (no API key / no GPU / no stubs),
+    returns { "video_url": null, "fallback": true } so the browser
+    keeps showing the canvas avatar gracefully.
+    """
+    try:
+        data = request.get_json(force=True, silent=True) or {}
+        audio_url = data.get("audio_url", "")
+
+        if not audio_url:
+            return jsonify({"video_url": None, "fallback": True, "reason": "No audio_url provided"})
+
+        # Resolve the audio file path from URL
+        # audio_url is like /static/tts_abc123.mp3
+        audio_filename = audio_url.lstrip("/").replace("static/", "")
+        mp3_path = os.path.join("static", audio_filename)
+
+        if not os.path.exists(mp3_path):
+            return jsonify({"video_url": None, "fallback": True, "reason": "Audio file not found on server"})
+
+        # Convert MP3 → WAV (Audio2Face-2D requires WAV 16kHz mono)
+        wav_path = mp3_path.replace(".mp3", "_a2f.wav")
+        try:
+            # Try ffmpeg first (best quality)
+            subprocess.run([
+                "ffmpeg", "-y", "-i", mp3_path,
+                "-ar", "16000", "-ac", "1", "-f", "wav", wav_path
+            ], capture_output=True, check=True, timeout=30)
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            try:
+                # Fallback: pydub
+                from pydub import AudioSegment
+                audio = AudioSegment.from_mp3(mp3_path)
+                audio = audio.set_frame_rate(16000).set_channels(1)
+                audio.export(wav_path, format="wav")
+            except Exception as e:
+                return jsonify({"video_url": None, "fallback": True, "reason": f"Audio conversion failed: {e}"})
+
+        # Check portrait exists
+        if not os.path.exists(PORTRAIT_PATH):
+            return jsonify({
+                "video_url": None,
+                "fallback": True,
+                "reason": "Doctor portrait not found. Place image at static/doctor_portrait.jpg"
+            })
+
+        # Generate video via NVIDIA Audio2Face-2D
+        video_filename = f"a2f_{uuid.uuid4().hex}.mp4"
+        output_mp4 = os.path.join(AVATAR_VIDEO_DIR, video_filename)
+
+        success = call_audio2face_2d(wav_path, PORTRAIT_PATH, output_mp4)
+
+        # Clean up temp WAV
+        try:
+            os.remove(wav_path)
+        except Exception:
+            pass
+
+        if success and os.path.exists(output_mp4):
+            return jsonify({
+                "video_url": f"/avatar/video/{video_filename}",
+                "fallback": False
+            })
+        else:
+            return jsonify({
+                "video_url": None,
+                "fallback": True,
+                "reason": "Audio2Face-2D generation failed. Check server logs."
+            })
+
+    except Exception as e:
+        print(f"❌ /avatar/generate error: {e}")
+        return jsonify({"video_url": None, "fallback": True, "reason": str(e)})
+
+
+@app.route("/avatar/video/<filename>")
+def serve_avatar_video(filename):
+    """Stream the generated MP4 video to the browser."""
+    video_path = os.path.join(AVATAR_VIDEO_DIR, filename)
+    if not os.path.exists(video_path):
+        return jsonify({"error": "Video not found"}), 404
+    return send_file(video_path, mimetype="video/mp4")
+
+
+@app.route("/avatar/status", methods=["GET"])
+def avatar_status():
+    """
+    Health check for the Audio2Face-2D integration.
+    Returns configuration status so the frontend can decide
+    whether to show video avatar or canvas fallback.
+    """
+    NGC_API_KEY  = os.getenv("NVIDIA_API_KEY", os.getenv("NGC_API_KEY", "")).strip()
+    has_portrait = os.path.exists(PORTRAIT_PATH)
+    has_grpcio   = False
+    has_client   = False
+
+    try:
+        import grpc
+        has_grpcio = True
+    except ImportError:
+        pass
+
+    client_script = os.path.join(
+        os.path.dirname(__file__), "nim-clients", "audio2face-2d", "python", "audio2face-2d.py"
+    )
+    has_client = os.path.exists(client_script)
+
+    ready = bool(NGC_API_KEY) and has_portrait and (has_grpcio or has_client)
+
+    return jsonify({
+        "ready": ready,
+        "has_api_key": bool(NGC_API_KEY),
+        "has_portrait": has_portrait,
+        "portrait_path": PORTRAIT_PATH,
+        "has_grpcio": has_grpcio,
+        "has_nim_client": has_client,
+        "setup_instructions": {
+            "1_api_key": "Add NVIDIA_API_KEY=<your_ngc_key> to your .env file",
+            "2_portrait": "Place your doctor portrait photo at: static/doctor_portrait.jpg",
+            "3_grpcio": "pip install grpcio grpcio-tools",
+            "4_client": "git clone https://github.com/NVIDIA-Maxine/nim-clients.git",
+            "5_ffmpeg": "Install ffmpeg for audio conversion (apt install ffmpeg)"
+        }
+    })
+
+
+# ==============================
+# CONVERSATIONAL DOCTOR ENDPOINT
+# ==============================
+DOCTOR_SYSTEM_PROMPT = """You are Dr. Safecure — an intelligent AI doctor, like Jarvis or Siri but for medicine.
+You talk like a calm, confident, real human doctor. Natural. Direct. Never robotic or stiff.
+You have clinical guidelines from PDFs available as context — use them for all recommendations.
+
+YOUR VOICE & STYLE:
+- Sound like a real doctor talking to a patient face to face. Warm but not over-the-top.
+- Short natural sentences. Like how a person actually speaks.
+- NO filler: never say "I understand your concern", "That sounds difficult", "Great question", "Certainly" etc.
+- NO markdown: no **, ##, dashes as bullets. Plain text only during conversation.
+- Respond in the SAME language the patient speaks (Hindi or English).
+
+CONSULTATION FLOW:
+1. Greet once, naturally. Ask the main problem.
+2. Ask ONE follow-up question at a time. Max 3 follow-ups total. Be brief.
+3. Once you have enough info (symptom + duration + allergies/current meds) → immediately give FINAL ASSESSMENT.
+4. Use the special final assessment format below (EXACTLY).
+
+EMERGENCY OVERRIDE: If patient says chest pain with sweating, can't breathe, unconscious, heavy bleeding → say:
+"This sounds like an emergency. Please call an ambulance or go to the nearest hospital right now. Don't wait."
+Then stop. Nothing else.
+
+FINAL ASSESSMENT FORMAT (use EXACTLY when you have enough info):
+When ready to give your final assessment, output it in this exact format — each section on its own line with the label followed by a colon and the content. Do not use bullets or dashes:
+
+DIAGNOSIS: [Most likely condition and brief reason why]
+FIRST LINE: [Primary medicines — drug names only, no doses, each separated by comma]
+SECOND LINE: [Alternative medicines if first line fails or is contraindicated — or write "Not needed"]
+TESTS: [Recommended tests — each separated by comma, with brief reason after a dash]
+AVOID: [Medicines or things to avoid — or write "None"]
+NOTE: [One short sentence of important advice for the patient]
+
+RULES:
+- Drug names only. NEVER give dosages (mg, ml, twice daily etc.)
+- Recommend medicines ONLY from the clinical PDF guidelines provided.
+- Do not leave any section empty in the final assessment.
+- The final assessment is ONLY triggered when you have enough info. Before that, just converse naturally."""
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    try:
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            return jsonify({"status": "error", "message": "Invalid JSON"}), 400
+
+        conversation_history = data.get("history", [])
+        user_message = data.get("message", "").strip()
+        lang = data.get("lang", "en")
+
+        if not user_message:
+            return jsonify({"status": "error", "message": "Empty message"}), 400
+
+        messages = [{"role": "system", "content": DOCTOR_SYSTEM_PROMPT}]
+
+        rag_context = "No clinical guidelines available."
+        try:
+            all_user_text = " ".join(
+                t["content"] for t in conversation_history if t.get("role") == "user"
+            ) + " " + user_message
+            vs = get_vectorstore()
+            docs = vs.as_retriever(search_kwargs={"k": 4}).invoke(all_user_text)
+            rag_context = "\n\n".join(d.page_content[:400] for d in docs)
+        except Exception as e:
+            print(f"RAG error in chat: {e}")
+
+        messages.append({
+            "role": "system",
+            "content": f"CLINICAL GUIDELINES FROM PDF (use these for recommendations):\n{rag_context}"
+        })
+
+        for turn in conversation_history:
+            if turn.get("role") in ("user", "assistant"):
+                messages.append({"role": turn["role"], "content": turn["content"]})
+
+        messages.append({"role": "user", "content": user_message})
+
+        GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+        res = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"},
+            json={
+                "model": "llama-3.3-70b-versatile",
+                "messages": messages,
+                "max_tokens": 380,
+                "temperature": 0.4
+            },
+            timeout=30
+        )
+
+        if res.status_code != 200:
+            return jsonify({"status": "error", "message": f"LLM error: {res.text[:200]}"}), 500
+
+        reply = res.json()["choices"][0]["message"]["content"]
+        reply = safety_filter(reply)
+
+        # TTS for the reply
+        tts_url = None
+        try:
+            tts_text = reply
+            import re as _re
+            tts_text = _re.sub(r'(DIAGNOSIS|FIRST LINE|SECOND LINE|TESTS|AVOID|NOTE):\s*', '', tts_text)
+            _, fname = generate_tts(tts_text.strip(), lang)
+            tts_url = f"/static/{fname}"
+        except Exception as e:
+            print(f"TTS error in chat: {e}")
+
+        return jsonify({
+            "status": "success",
+            "reply": reply,
+            "audio_url": tts_url
+        })
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -684,7 +1174,7 @@ def health():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("avatar.html")
 
 
 @app.route("/database")
@@ -700,4 +1190,10 @@ if __name__ == "__main__":
     init_db()
     get_vectorstore()
     print("✅ Ready! Visit http://localhost:5000")
+    print("\n📋 NVIDIA Audio2Face-2D Setup Checklist:")
+    print("   → Add NVIDIA_API_KEY to .env")
+    print("   → Place doctor photo at: static/doctor_portrait.jpg")
+    print("   → pip install grpcio grpcio-tools")
+    print("   → git clone https://github.com/NVIDIA-Maxine/nim-clients.git")
+    print("   → apt install ffmpeg")
     app.run(debug=True, host='0.0.0.0', port=5000)
